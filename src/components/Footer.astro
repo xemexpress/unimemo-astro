@@ -1,0 +1,33 @@
+---
+import { OUR_BRAND } from "../utils/constants";
+---
+
+<footer class="bg-sky-700 text-center py-14 max-sm:py-8">
+    <div class="container mx-auto flex flex-col items-center text-sky-100">
+        <div class="flex items-center">
+            <span class="text-2xl mr-2">✆</span>
+            {OUR_BRAND.CONTACT_NUMBER}
+            <a
+                href={`https://wa.me/${OUR_BRAND.CONTACT_NUMBER.replace(/\D/g, "")}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="ml-2"
+            >
+                <img
+                    src="https://img.icons8.com/?size=100&id=16713&format=png&color=000000"
+                    alt="WhatsApp"
+                    class="w-5 h-5"
+                />
+            </a>
+        </div>
+        <div>
+            <a href=`mailto:${OUR_BRAND.HELP_DESK}`>
+                ✉️ {OUR_BRAND.HELP_DESK}
+            </a>
+        </div>
+        <div class="mt-10 text-sky-900">
+            © {OUR_BRAND.COPYRIGHT}
+            {OUR_BRAND.NAME}. All rights reserved.
+        </div>
+    </div>
+</footer>

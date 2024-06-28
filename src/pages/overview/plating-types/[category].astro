@@ -1,0 +1,14 @@
+---
+import type { GetStaticPaths } from "astro";
+import { PLATING } from "../../../utils/constants";
+
+export const getStaticPaths = (() => {
+    return PLATING.ALL_TYPES.map((platingType) => ({
+        params: { category: platingType },
+    }));
+}) satisfies GetStaticPaths;
+
+const { category } = Astro.params;
+
+return Astro.redirect(`/overview/plating-types/${category}/1`);
+---

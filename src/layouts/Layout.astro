@@ -1,0 +1,103 @@
+---
+import { SEO } from "astro-seo";
+
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import { OUR_BRAND } from "../utils/constants";
+import { getImage } from "astro:assets";
+import logo from "../content/logo.png";
+
+type Props = {
+    title: string;
+    description: string;
+    type?: string;
+    image?: string;
+    product?: {
+        sku: string;
+        price: string;
+        currency: string;
+    };
+};
+
+const { title, description, type = "website", image, product } = Astro.props;
+
+const finalImageSrc = (
+    await getImage({
+        src: image || logo,
+        width: 1200,
+        height: 630,
+        format: "jpg",
+        quality: 90,
+        fit: "contain", // This will add padding to maintain aspect ratio
+        background: "white", // Optional: Set background color if needed
+    })
+).src;
+
+// Also create a PNG version for broader support
+const faviconSrcPNG = (
+    await getImage({
+        src: logo,
+        width: 32,
+        height: 32,
+        format: "png",
+        quality: 90,
+    })
+).src;
+---
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="sitemap" href="/sitemap-index.xml" />
+        <link rel="icon" type="image/png" href={faviconSrcPNG} />
+
+        <meta name="viewport" content="width=device-width" />
+        <meta name="generator" content={Astro.generator} />
+
+        <SEO
+            title={title}
+            description={description}
+            openGraph={{
+                basic: {
+                    title: title,
+                    type: type,
+                    image: finalImageSrc,
+                    url: Astro.url,
+                },
+                optional: {
+                    description: description,
+                    siteName: OUR_BRAND.NAME,
+                },
+                image: {
+                    url: finalImageSrc,
+                    alt: description,
+                },
+            }}
+            twitter={{
+                card: "summary_large_image",
+                site: Astro.url.href,
+                creator: "@xemexpress",
+                title: title,
+                description: description,
+                image: finalImageSrc,
+                imageAlt: description,
+            }}
+            extend={{
+                // extending the default link tags
+                link: [{ rel: "icon", href: OUR_BRAND.LOGO }],
+                // extending the default meta tags
+                meta: product && [
+                    { name: "og:price:sku", content: product?.sku },
+                    { name: "og:price:amount", content: product?.price },
+                    { name: "og:price:currency", content: product?.currency },
+                    { name: "product:brand", content: OUR_BRAND.NAME },
+                ],
+            }}
+        />
+    </head>
+    <body class="min-h-screen grid grid-rows-[auto, fr, auto]">
+        <Header />
+        <slot />
+        <Footer />
+    </body>
+</html>

@@ -1,0 +1,54 @@
+---
+import type { CollectionEntry } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+import { OUR_BRAND } from "../utils/constants";
+import H1 from "./H1.astro";
+import Main from "./Main.astro";
+import Pagination from "./Pagination.astro";
+import ProductList from "./ProductList.astro";
+import type { Page } from "astro";
+import ProductFilter from "./ProductFilter.astro";
+
+type Props = {
+    title: string;
+    description?: string;
+    page: Page;
+    byCategory?: boolean;
+};
+const {
+    title,
+    page,
+    description = OUR_BRAND.DESCRIPTION,
+    byCategory = false,
+} = Astro.props;
+
+const products = page.data as CollectionEntry<"products">[];
+---
+
+<Layout title=`${title} | ${OUR_BRAND.NAME}` description={description}>
+    <Main>
+        <H1 title={title} />
+
+        {
+            byCategory ? (
+                <a
+                    class="text-sky-500 text-lg underline block mb-4"
+                    href="/overview"
+                >
+                    Back to all products
+                </a>
+            ) : (
+                <ProductFilter />
+            )
+        }
+        <div class="mb-12">
+            <Pagination prevURL={page.url.prev} nextURL={page.url.next} />
+        </div>
+
+        <ProductList products={products} />
+
+        <div class="my-12">
+            <Pagination prevURL={page.url.prev} nextURL={page.url.next} />
+        </div>
+    </Main>
+</Layout>

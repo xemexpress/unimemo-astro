@@ -1,0 +1,14 @@
+---
+import type { GetStaticPaths } from "astro";
+import { METAL } from "../../../utils/constants";
+
+export const getStaticPaths = (() => {
+    return METAL.ALL_TYPES.map((metalType) => ({
+        params: { category: metalType },
+    }));
+}) satisfies GetStaticPaths;
+
+const { category } = Astro.params;
+
+return Astro.redirect(`/overview/metal-types/${category}/1`);
+---

@@ -1,0 +1,32 @@
+---
+type Props = {
+    prevURL?: string;
+    nextURL?: string;
+};
+
+const { prevURL, nextURL } = Astro.props;
+---
+
+<div class="flex justify-between">
+    {
+        prevURL && (
+            <a
+                class="bg-sky-900 text-white py-1 px-3 rounded-lg text-lg"
+                href={prevURL}
+            >
+                ←
+            </a>
+        )
+    }
+    <div class="flex-grow"></div>
+    {
+        nextURL && (
+            <a
+                class="bg-sky-900 text-white py-1 px-3 rounded-lg text-lg"
+                href={nextURL}
+            >
+                →
+            </a>
+        )
+    }
+</div>

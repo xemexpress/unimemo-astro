@@ -1,0 +1,18 @@
+---
+import Category from "./Category.astro";
+
+type Props = {
+    categories: string[];
+    generateLink: (category: string) => string;
+};
+
+const { categories, generateLink } = Astro.props;
+---
+
+<div class="flex flex-wrap items-center gap-2">
+    {
+        categories.map((category) => (
+            <Category name={category} link={generateLink(category)} />
+        ))
+    }
+</div>

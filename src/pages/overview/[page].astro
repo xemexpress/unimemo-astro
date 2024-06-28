@@ -1,0 +1,25 @@
+---
+import type { GetStaticPathsOptions, Page } from "astro";
+import { getCollection } from "astro:content";
+import { OUR_BRAND, UI } from "../../utils/constants";
+import ProductListView from "../../components/ProductListView.astro";
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+    const allProducts = await getCollection("products");
+
+    return paginate(allProducts, { pageSize: UI.PRODUCTS_PER_PAGE });
+}
+
+type Props = {
+    page: Page;
+};
+
+const { page } = Astro.props;
+const title = "價目單";
+---
+
+<ProductListView
+    title={title}
+    page={page}
+    description={OUR_BRAND.DESCRIPTION}
+/>

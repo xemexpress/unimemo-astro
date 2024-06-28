@@ -1,0 +1,34 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+import H1 from "../components/H1.astro";
+import ProductList from "../components/ProductList.astro";
+import Main from "../components/Main.astro";
+import { OUR_BRAND, UI } from "../utils/constants";
+import Pagination from "../components/Pagination.astro";
+import ProductFilter from "../components/ProductFilter.astro";
+
+const products = (await getCollection("products")).slice(
+    0,
+    UI.PRODUCTS_PER_PAGE
+);
+---
+
+<Layout
+    title=`${OUR_BRAND.NAME} | ${OUR_BRAND.MISSION}`
+    description={OUR_BRAND.DESCRIPTION}
+>
+    <Main>
+        <H1 title="價目單" />
+
+        <ProductFilter />
+
+        <div class="mb-12">
+            <Pagination nextURL="/overview/2" />
+        </div>
+        <ProductList products={products} />
+        <div class="my-12">
+            <Pagination nextURL="/overview/2" />
+        </div>
+    </Main>
+</Layout>

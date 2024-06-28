@@ -1,0 +1,14 @@
+---
+import type { GetStaticPaths } from "astro";
+import { PRODUCT } from "../../../utils/constants";
+
+export const getStaticPaths = (() => {
+    return PRODUCT.ALL_TYPES.map((productType) => ({
+        params: { category: productType },
+    }));
+}) satisfies GetStaticPaths;
+
+const { category } = Astro.params;
+
+return Astro.redirect(`/overview/product-types/${category}/1`);
+---

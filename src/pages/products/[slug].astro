@@ -1,0 +1,234 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { getCollection } from "astro:content";
+import { ProductUtils, SEOUtils, StringUtils } from "../../utils/coreUtils";
+import Layout from "../../layouts/Layout.astro";
+import Main from "../../components/Main.astro";
+import H1 from "../../components/H1.astro";
+import { Image, getImage } from "astro:assets";
+
+export async function getStaticPaths() {
+    const products = await getCollection("products");
+
+    return products.map((product) => ({
+        params: { slug: product.slug },
+        props: { product },
+    }));
+}
+
+type Props = {
+    product: CollectionEntry<"products">;
+    text: string;
+};
+
+const { product } = Astro.props;
+const {
+    images,
+    sku,
+    tags,
+    unit,
+    price,
+    stock,
+    remarks,
+    stones = "",
+} = product.data;
+const { productType, metalType, plating } = ProductUtils.deriveProductInfo(sku);
+const description = SEOUtils.generateProductDetailSiteDescription(
+    productType,
+    metalType,
+    plating,
+    stones
+);
+
+const title = `Product ${sku}`;
+
+const coverImageSrc = (await getImage({ src: images[0], format: "jpg" })).src;
+---
+
+<Layout
+    title={title}
+    description={description}
+    type="product"
+    image={coverImageSrc}
+    product={{ sku: sku, price: `${price}`, currency: "HKD" }}
+>
+    <Main>
+        <H1 title={title} />
+        <a class="text-sky-700 text-lg underline block mb-4" href="/overview">
+            Back to all products
+        </a>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Product Image -->
+            <div class="flex justify-center overflow-hidden rounded-3xl">
+                <Image
+                    class="w-full max-w-md shadow-lg object-cover transition-transform duration-300 ease-in-out hover:scale-110 rounded-3xl"
+                    src={images[0]}
+                    alt={title}
+                    width={1024}
+                    height={1024}
+                />
+            </div>
+
+            <!-- Product Details -->
+            <div class="space-y-4">
+                <h2 class="text-2xl font-semibold text-sky-900">
+                    Product details
+                </h2>
+                <table
+                    class="min-w-full bg-white border border-gray-200 rounded-lg shadow-sm"
+                >
+                    <tbody>
+                        <tr
+                            class="border-t hover:bg-gray-200 hover:shadow-md transition duration-300"
+                        >
+                            <td
+                                class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900"
+                                >SKU</td
+                            >
+                            <td
+                                class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-700"
+                                >{sku}</td
+                            >
+                        </tr>
+                        <tr
+                            class="border-t hover:bg-gray-200 hover:shadow-md transition duration-300"
+                        >
+                            <td
+                                class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900"
+                                >Unit price</td
+                            >
+                            <td
+                                class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-700"
+                            >
+                                HK${price} / {unit}
+                            </td>
+                        </tr>
+                        <tr
+                            class="border-t hover:bg-gray-200 hover:shadow-md transition duration-300"
+                        >
+                            <td
+                                class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900"
+                                >Stock</td
+                            >
+                            <td
+                                class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-700"
+                            >
+                                {
+                                    stock > 0
+                                        ? `${stock} in stock`
+                                        : "Out of stock"
+                                }
+                            </td>
+                        </tr>
+                        <tr
+                            class="border-t bg-gray-50 hover:bg-gray-200 hover:shadow-md transition duration-300"
+                        >
+                            <td
+                                class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                                >Product type</td
+                            >
+                            <td
+                                class="px-6 py-4 whitespace-nowrap text-sm text-gray-700"
+                            >
+                                {StringUtils.capitalizeFirstLetter(productType)}
+                            </td>
+                        </tr>
+                        <tr
+                            class="border-t bg-gray-50 hover:bg-gray-200 hover:shadow-md transition duration-300"
+                        >
+                            <td
+                                class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                                >Base metal type</td
+                            >
+                            <td
+                                class="px-6 py-4 whitespace-nowrap text-sm text-gray-700"
+                            >
+                                {StringUtils.capitalizeFirstLetter(metalType)}
+                            </td>
+                        </tr>
+                        <tr
+                            class="border-t bg-gray-50 hover:bg-gray-200 hover:shadow-md transition duration-300"
+                        >
+                            <td
+                                class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                                >Plating</td
+                            >
+                            <td
+                                class="px-6 py-4 whitespace-nowrap text-sm text-gray-700"
+                            >
+                                {StringUtils.capitalizeFirstLetter(plating)}
+                            </td>
+                        </tr>
+                        {
+                            stones.trim() !== "" && (
+                                <tr class="border-t bg-gray-50 hover:bg-gray-200 hover:shadow-md transition duration-300">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        Stones
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        {StringUtils.capitalizeFirstLetter(
+                                            stones
+                                        )}
+                                    </td>
+                                </tr>
+                            )
+                        }
+                        {
+                            remarks.trim() !== "" && (
+                                <tr class="border-t bg-gray-50 hover:bg-gray-200 hover:shadow-md transition duration-300">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        Remarks
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                                        {StringUtils.capitalizeFirstLetter(
+                                            remarks
+                                        )}
+                                    </td>
+                                </tr>
+                            )
+                        }
+                        {
+                            tags.length > 0 && (
+                                <tr class="border-t bg-gray-50 hover:bg-gray-200 transition duration-300">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                        Tags
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-700">
+                                        <div class="flex flex-wrap gap-2">
+                                            {tags.map((tag: string) => (
+                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                    {tag}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </td>
+                                </tr>
+                            )
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        {/* Display additional product images */}
+        {
+            images.length > 1 && (
+                <div class="mt-6 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
+                    {images.slice(1).map((image, index: number) => (
+                        <Image
+                            src={image}
+                            alt={`${sku} | Product image ${index + 2}`}
+                            width={360}
+                            height={360}
+                            class="rounded-md object-cover"
+                        />
+                    ))}
+                </div>
+            )
+        }
+        <a class="text-sky-700 text-lg underline block mt-4" href="/overview">
+            Back to all products
+        </a>
+    </Main>
+</Layout>

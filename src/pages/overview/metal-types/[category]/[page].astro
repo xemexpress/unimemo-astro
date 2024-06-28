@@ -1,0 +1,46 @@
+---
+import type { GetStaticPathsOptions, Page } from "astro";
+import { METAL, UI } from "../../../../utils/constants";
+import { getCollection } from "astro:content";
+import {
+    StringUtils,
+    ProductUtils,
+    SEOUtils,
+} from "../../../../utils/coreUtils";
+import ProductListView from "../../../../components/ProductListView.astro";
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+    const metalTypes = METAL.ALL_TYPES;
+
+    const allProducts = await getCollection("products");
+
+    return metalTypes.flatMap((metalType) => {
+        const filteredProducts = allProducts.filter(
+            (product) =>
+                ProductUtils.getMetalTypeFromSku(product.data.sku) === metalType
+        );
+
+        return paginate(filteredProducts, {
+            params: { category: metalType },
+            pageSize: UI.PRODUCTS_PER_PAGE,
+        });
+    });
+}
+
+type Props = {
+    page: Page;
+};
+
+const { page } = Astro.props;
+const { category } = Astro.params;
+const title = StringUtils.capitalizeFirstLetter(category);
+const seoDescription =
+    SEOUtils.generateProductListCategoryDescription(category);
+---
+
+<ProductListView
+    title={title}
+    page={page}
+    description={seoDescription}
+    byCategory={true}
+/>
