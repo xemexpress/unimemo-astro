@@ -4,7 +4,7 @@ import { OUR_BRAND } from "../utils/constants";
 
 <footer class="bg-sky-700 text-center py-14 max-sm:py-8">
     <div class="container mx-auto flex flex-col items-center text-sky-100">
-        <div class="flex items-center">
+        <div class="flex items-center mb-4">
             <span class="text-2xl mr-2">✆</span>
             {OUR_BRAND.CONTACT_NUMBER}
             <a
@@ -20,12 +20,22 @@ import { OUR_BRAND } from "../utils/constants";
                 />
             </a>
         </div>
-        <div>
-            <a href=`mailto:${OUR_BRAND.HELP_DESK}`>
+        <div class="mb-4">
+            <a href=`mailto:${OUR_BRAND.HELP_DESK}` class="hover:underline">
                 ✉️ {OUR_BRAND.HELP_DESK}
             </a>
         </div>
-        <div class="mt-10 text-sky-900">
+        <div class="max-w-md mx-auto text-sm mb-6">
+            <p class="mb-2">
+                <strong>Free Pick-up Location:</strong> Olympian City 3
+            </p>
+            <p class="mb-2">
+                <strong>In-store Delivery Fee:</strong> $25, Free for orders over
+                $800
+            </p>
+            <p>For any inquiries or feedback, please feel free to contact us</p>
+        </div>
+        <div class="text-sky-200 text-xs">
             © {OUR_BRAND.COPYRIGHT}
             {OUR_BRAND.NAME}. All rights reserved.
         </div>
