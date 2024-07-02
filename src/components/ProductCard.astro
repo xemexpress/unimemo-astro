@@ -10,7 +10,7 @@ type Props = {
 
 const { product } = Astro.props;
 
-const { images, sku, unit, price, stock } = product.data;
+const { images, sku, unit, price, isAvailable } = product.data;
 
 const { productType } = ProductUtils.deriveProductInfo(sku);
 ---
@@ -30,5 +30,5 @@ const { productType } = ProductUtils.deriveProductInfo(sku);
     </div>
     <div class="text-center leading-snug">{sku}</div>
     <div class="text-center">HK${price}/{unit}</div>
-    {stock <= 0 && <div class="text-center text-red-500">Out of Stock</div>}
+    {!isAvailable && <div class="text-center text-red-500">Out of Stock</div>}
 </article>
