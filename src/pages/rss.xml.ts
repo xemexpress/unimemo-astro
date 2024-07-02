@@ -7,6 +7,7 @@ import { ProductUtils } from "../utils/coreUtils";
 
 export async function GET(context: APIContext) {
     const products = await getCollection("products");
+    const today = new Date(); // Get today's date
 
     return rss({
         title: `${OUR_BRAND.NAME} Product Catalog`,
@@ -58,6 +59,7 @@ export async function GET(context: APIContext) {
                 description: sanitizeHtml(description),
                 link: `/products/${product.slug}/`,
                 image: images[0], // Keep the first image as the main image for the RSS item
+                pubDate: today, // Set pubDate to today's date for all items
             };
         }),
     });
