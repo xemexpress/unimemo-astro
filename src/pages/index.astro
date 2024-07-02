@@ -8,20 +8,18 @@ import { OUR_BRAND, UI } from "../utils/constants";
 import Pagination from "../components/Pagination.astro";
 import ProductFilter from "../components/ProductFilter.astro";
 
-const products = (await getCollection("products")).slice(
-    0,
-    UI.PRODUCTS_PER_PAGE
-);
+const products = (await getCollection("products"))
+    .filter((product) => product.data.isAvailable)
+    .sort((a, b) => a.data.price - b.data.price)
+    .slice(0, UI.PRODUCTS_PER_PAGE);
+
+const title = `${OUR_BRAND.NAME} | ${OUR_BRAND.MISSION}`;
+const description = OUR_BRAND.DESCRIPTION;
 ---
 
-<Layout
-    title=`${OUR_BRAND.NAME} | ${OUR_BRAND.MISSION}`
-    description={OUR_BRAND.DESCRIPTION}
->
+<Layout title={title} description={description}>
     <Main>
         <H1 title="價目單" />
-
-        <ProductFilter />
 
         <div class="mb-12">
             <Pagination nextURL="/overview/2" />
@@ -30,5 +28,7 @@ const products = (await getCollection("products")).slice(
         <div class="my-12">
             <Pagination nextURL="/overview/2" />
         </div>
+
+        <ProductFilter />
     </Main>
 </Layout>

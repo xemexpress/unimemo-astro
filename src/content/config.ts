@@ -1,5 +1,4 @@
 import { defineCollection, z } from "astro:content";
-import { format } from "date-fns";
 
 const productsCollection = defineCollection({
     schema: ({ image }) =>

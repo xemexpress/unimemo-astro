@@ -3,7 +3,7 @@ export const OUR_BRAND = {
     MISSION: "Inspire the next jewelry",
     CONTACT_NUMBER: "+852 69 080 040",
     HELP_DESK: "unimemo.helpdesk@gmail.com",
-    COPYRIGHT: "2021",
+    COPYRIGHT: "2024",
     LOGO: "../content/logo.png",
     get DESCRIPTION() {
         return `Welcome to ${this.NAME}, your trusted jewelry wholesaler and manufacturer. We are committed to giving most jewelry to most customers. We encourage you to send a photo of any pieces of jewelry that you love. In exchange, we promise to offer you the best price to serve you and our mission.`;
