@@ -5,7 +5,9 @@ import { OUR_BRAND, UI } from "../../utils/constants";
 import ProductListView from "../../components/ProductListView.astro";
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
-    const allProducts = await getCollection("products");
+    const allProducts = (await getCollection("products"))
+        .filter((product) => product.data.isAvailable)
+        .sort((a, b) => a.data.price - b.data.price);
 
     return paginate(allProducts, { pageSize: UI.PRODUCTS_PER_PAGE });
 }

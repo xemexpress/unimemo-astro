@@ -30,13 +30,5 @@ const { productType } = ProductUtils.deriveProductInfo(sku);
     </div>
     <div class="text-center leading-snug">{sku}</div>
     <div class="text-center">HK${price}/{unit}</div>
-    {
-        stock > 0 ? (
-            <div class="text-center text-green-500">
-                In Stock: <span class="font-bold">{stock}</span>
-            </div>
-        ) : (
-            <div class="text-center text-red-500">Out of Stock</div>
-        )
-    }
+    {stock <= 0 && <div class="text-center text-red-500">Out of Stock</div>}
 </article>

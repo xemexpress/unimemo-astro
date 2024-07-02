@@ -16,12 +16,14 @@ export const UI = {
 
 export const PRODUCT = {
     TYPES: {
+        PACKAGING: "packaging",
         PENDANT: "pendant",
         NECKLACE: "necklace",
         EAR_STUDS: "ear studs",
     },
     get CODES() {
         return {
+            [this.TYPES.PACKAGING]: "01",
             [this.TYPES.PENDANT]: "11",
             [this.TYPES.NECKLACE]: "22",
             [this.TYPES.EAR_STUDS]: "33",

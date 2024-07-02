@@ -30,15 +30,13 @@ const products = page.data as CollectionEntry<"products">[];
         <H1 title={title} />
 
         {
-            byCategory ? (
+            byCategory && (
                 <a
                     class="text-sky-500 text-lg underline block mb-4"
                     href="/overview"
                 >
                     Back to all products
                 </a>
-            ) : (
-                <ProductFilter />
             )
         }
         <div class="mb-12">
@@ -50,5 +48,18 @@ const products = page.data as CollectionEntry<"products">[];
         <div class="my-12">
             <Pagination prevURL={page.url.prev} nextURL={page.url.next} />
         </div>
+
+        {
+            byCategory ? (
+                <a
+                    class="text-sky-500 text-lg underline block mb-4"
+                    href="/overview"
+                >
+                    Back to all products
+                </a>
+            ) : (
+                <ProductFilter />
+            )
+        }
     </Main>
 </Layout>

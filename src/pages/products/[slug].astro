@@ -6,6 +6,9 @@ import Layout from "../../layouts/Layout.astro";
 import Main from "../../components/Main.astro";
 import H1 from "../../components/H1.astro";
 import { Image, getImage } from "astro:assets";
+import { PRODUCT } from "../../utils/constants";
+import MarkdownIt from "markdown-it";
+import sanitizeHtml from "sanitize-html";
 
 export async function getStaticPaths() {
     const products = await getCollection("products");
@@ -20,7 +23,7 @@ type Props = {
     product: CollectionEntry<"products">;
     text: string;
 };
-
+const md = new MarkdownIt();
 const { product } = Astro.props;
 const {
     images,
@@ -28,7 +31,7 @@ const {
     tags,
     unit,
     price,
-    stock,
+    isAvailable,
     remarks,
     stones = "",
 } = product.data;
@@ -41,6 +44,7 @@ const description = SEOUtils.generateProductDetailSiteDescription(
 );
 
 const title = `Product ${sku}`;
+const renderedRemarks = md.render(remarks);
 
 const coverImageSrc = (await getImage({ src: images[0], format: "jpg" })).src;
 ---
@@ -84,9 +88,9 @@ const coverImageSrc = (await getImage({ src: images[0], format: "jpg" })).src;
                             <tr
                                 class="border-t hover:bg-gray-200 hover:shadow-md transition duration-300"
                             >
-                                <td
-                                    class="px-3 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-semibold text-gray-900"
-                                    >SKU</td
+                                <th
+                                    class="px-3 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-semibold text-gray-900 align-top text-left"
+                                    >SKU</th
                                 >
                                 <td
                                     class="px-3 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium text-gray-700"
@@ -96,9 +100,9 @@ const coverImageSrc = (await getImage({ src: images[0], format: "jpg" })).src;
                             <tr
                                 class="border-t hover:bg-gray-200 hover:shadow-md transition duration-300"
                             >
-                                <td
-                                    class="px-3 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-semibold text-gray-900"
-                                    >Unit price</td
+                                <th
+                                    class="px-3 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-semibold text-gray-900 align-top text-left"
+                                    >Unit price</th
                                 >
                                 <td
                                     class="px-3 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium text-gray-700"
@@ -109,26 +113,22 @@ const coverImageSrc = (await getImage({ src: images[0], format: "jpg" })).src;
                             <tr
                                 class="border-t hover:bg-gray-200 hover:shadow-md transition duration-300"
                             >
-                                <td
-                                    class="px-3 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-semibold text-gray-900"
-                                    >Stock</td
+                                <th
+                                    class="px-3 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-semibold text-gray-900 align-top text-left"
+                                    >Stock</th
                                 >
                                 <td
                                     class="px-3 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium text-gray-700"
                                 >
-                                    {
-                                        stock > 0
-                                            ? `${stock} in stock`
-                                            : "Out of stock"
-                                    }
+                                    {isAvailable ? `Available` : "Out of stock"}
                                 </td>
                             </tr>
                             <tr
                                 class="border-t bg-gray-50 hover:bg-gray-200 hover:shadow-md transition duration-300"
                             >
-                                <td
-                                    class="px-3 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-semibold text-gray-900"
-                                    >Product type</td
+                                <th
+                                    class="px-3 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-semibold text-gray-900 align-top text-left"
+                                    >Product type</th
                                 >
                                 <td
                                     class="px-3 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-700"
@@ -140,42 +140,38 @@ const coverImageSrc = (await getImage({ src: images[0], format: "jpg" })).src;
                                     }
                                 </td>
                             </tr>
-                            <tr
-                                class="border-t bg-gray-50 hover:bg-gray-200 hover:shadow-md transition duration-300"
-                            >
-                                <td
-                                    class="px-3 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-semibold text-gray-900"
-                                    >Base metal type</td
-                                >
-                                <td
-                                    class="px-3 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-700"
-                                >
-                                    {
-                                        StringUtils.capitalizeFirstLetter(
-                                            metalType
-                                        )
-                                    }
-                                </td>
-                            </tr>
-                            <tr
-                                class="border-t bg-gray-50 hover:bg-gray-200 hover:shadow-md transition duration-300"
-                            >
-                                <td
-                                    class="px-3 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-semibold text-gray-900"
-                                    >Plating</td
-                                >
-                                <td
-                                    class="px-3 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-700"
-                                >
-                                    {StringUtils.capitalizeFirstLetter(plating)}
-                                </td>
-                            </tr>
+                            {
+                                productType != PRODUCT.TYPES.PACKAGING && (
+                                    <>
+                                        <tr class="border-t bg-gray-50 hover:bg-gray-200 hover:shadow-md transition duration-300">
+                                            <th class="px-3 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-semibold text-gray-900 align-top text-left">
+                                                Base metal type
+                                            </th>
+                                            <td class="px-3 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-700">
+                                                {StringUtils.capitalizeFirstLetter(
+                                                    metalType
+                                                )}
+                                            </td>
+                                        </tr>
+                                        <tr class="border-t bg-gray-50 hover:bg-gray-200 hover:shadow-md transition duration-300">
+                                            <th class="px-3 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-semibold text-gray-900 align-top text-left">
+                                                Plating
+                                            </th>
+                                            <td class="px-3 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-700">
+                                                {StringUtils.capitalizeFirstLetter(
+                                                    plating
+                                                )}
+                                            </td>
+                                        </tr>
+                                    </>
+                                )
+                            }
                             {
                                 stones.trim() !== "" && (
                                     <tr class="border-t bg-gray-50 hover:bg-gray-200 hover:shadow-md transition duration-300">
-                                        <td class="px-3 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-semibold text-gray-900">
+                                        <th class="px-3 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-semibold text-gray-900 align-top text-left">
                                             Stones
-                                        </td>
+                                        </th>
                                         <td class="px-3 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-700">
                                             {StringUtils.capitalizeFirstLetter(
                                                 stones
@@ -184,16 +180,19 @@ const coverImageSrc = (await getImage({ src: images[0], format: "jpg" })).src;
                                     </tr>
                                 )
                             }
+
                             {
                                 remarks.trim() !== "" && (
                                     <tr class="border-t bg-gray-50 hover:bg-gray-200 hover:shadow-md transition duration-300">
-                                        <td class="px-3 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-semibold text-gray-900">
+                                        <th class="px-3 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-semibold text-gray-900 align-top text-left align-top text-left">
                                             Remarks
-                                        </td>
-                                        <td class="px-3 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-700">
-                                            {StringUtils.capitalizeFirstLetter(
-                                                remarks
-                                            )}
+                                        </th>
+                                        <td class="px-3 py-3 sm:px-6 sm:py-4 text-xs sm:text-sm text-gray-700">
+                                            <div
+                                                set:html={sanitizeHtml(
+                                                    renderedRemarks
+                                                )}
+                                            />
                                         </td>
                                     </tr>
                                 )
@@ -201,9 +200,9 @@ const coverImageSrc = (await getImage({ src: images[0], format: "jpg" })).src;
                             {
                                 tags.length > 0 && (
                                     <tr class="border-t bg-gray-50 hover:bg-gray-200 transition duration-300">
-                                        <td class="px-3 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-semibold text-gray-900">
+                                        <th class="px-3 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-semibold text-gray-900 align-top text-left">
                                             Tags
-                                        </td>
+                                        </th>
                                         <td class="px-3 py-3 sm:px-6 sm:py-4 text-xs sm:text-sm text-gray-700">
                                             <div class="flex flex-wrap gap-1 sm:gap-2">
                                                 {tags.map((tag: string) => (

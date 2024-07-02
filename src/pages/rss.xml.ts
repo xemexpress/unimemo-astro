@@ -13,16 +13,8 @@ export async function GET(context: APIContext) {
         description: OUR_BRAND.DESCRIPTION,
         site: context.site?.toString() || "",
         items: products.map((product) => {
-            const {
-                sku,
-                tags,
-                unit,
-                price,
-                stock,
-                images,
-                remarks,
-                updatedOn,
-            } = product.data;
+            const { sku, tags, unit, price, isAvailable, images, remarks } =
+                product.data;
             const { productType, metalType, plating } =
                 ProductUtils.deriveProductInfo(sku);
             const title = `Product ${sku}`;
@@ -53,7 +45,7 @@ export async function GET(context: APIContext) {
                 <p><strong>Unit:</strong> ${unit}</p>
                 <p><strong>Price:</strong> $${price} HKD</p>
                 <p><strong>Stock:</strong> ${
-                    stock > 0 ? `${stock} in stock` : "Out of stock"
+                    isAvailable ? `In stock` : "Out of stock"
                 }</p>
                 <p><strong>Product Type:</strong> ${productType}</p>
                 <p><strong>Metal Type:</strong> ${metalType}</p>
@@ -63,7 +55,6 @@ export async function GET(context: APIContext) {
 
             return {
                 title: title,
-                pubDate: new Date(updatedOn),
                 description: sanitizeHtml(description),
                 link: `/products/${product.slug}/`,
                 image: images[0], // Keep the first image as the main image for the RSS item

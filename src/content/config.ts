@@ -11,10 +11,7 @@ const productsCollection = defineCollection({
             price: z.number(),
             stones: z.string().default(""),
             remarks: z.string().default("No additional remarks"),
-            updatedOn: z
-                .string()
-                .transform((s) => format(new Date(s), "MMMM dd, yyyy")),
-            stock: z.number(),
+            isAvailable: z.boolean(),
         }),
 });
 
