@@ -6,7 +6,9 @@ import { OUR_BRAND } from "../utils/constants";
 import { ProductUtils } from "../utils/coreUtils";
 
 export async function GET(context: APIContext) {
-    const products = await getCollection("products");
+    const products = (await getCollection("products"))
+        .filter((product) => product.data.isAvailable)
+        .sort((a, b) => a.data.price - b.data.price);
     const today = new Date(); // Get today's date
 
     return rss({
