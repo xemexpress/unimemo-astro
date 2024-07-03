@@ -1,6 +1,4 @@
 ---
-import type { CollectionEntry } from "astro:content";
-import { getCollection } from "astro:content";
 import { ProductUtils, SEOUtils, StringUtils } from "../../utils/coreUtils";
 import Layout from "../../layouts/Layout.astro";
 import Main from "../../components/Main.astro";
@@ -9,22 +7,17 @@ import { Image, getImage } from "astro:assets";
 import { PRODUCT } from "../../utils/constants";
 import MarkdownIt from "markdown-it";
 import sanitizeHtml from "sanitize-html";
+import { getEntryBySlug } from "astro:content";
+import BackToAllProducts from "../../components/BackToAllProducts.astro";
 
-export async function getStaticPaths() {
-    const products = await getCollection("products");
+const { slug } = Astro.params;
+const product = await getEntryBySlug("products", slug as string);
 
-    return products.map((product) => ({
-        params: { slug: product.slug },
-        props: { product },
-    }));
+if (!product) {
+    return Astro.redirect("/404");
 }
 
-type Props = {
-    product: CollectionEntry<"products">;
-    text: string;
-};
 const md = new MarkdownIt();
-const { product } = Astro.props;
 const {
     images,
     sku,
@@ -58,9 +51,8 @@ const coverImageSrc = (await getImage({ src: images[0], format: "jpg" })).src;
 >
     <Main>
         <H1 title={title} />
-        <a class="text-sky-700 text-lg underline block mb-4" href="/overview/1">
-            Back to all products
-        </a>
+
+        <BackToAllProducts />
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <!-- Product Image -->
@@ -237,8 +229,6 @@ const coverImageSrc = (await getImage({ src: images[0], format: "jpg" })).src;
                 </div>
             )
         }
-        <a class="text-sky-700 text-lg underline block mt-4" href="/overview/1">
-            Back to all products
-        </a>
+        <BackToAllProducts />
     </Main>
 </Layout>

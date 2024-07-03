@@ -1,5 +1,3 @@
-// utils.ts
-
 import {
     PRODUCT,
     METAL,
@@ -16,11 +14,11 @@ export const StringUtils = {
 
 export const LinkUtils = {
     generateSpecificProductTypeLink: (productType: string): string =>
-        `/overview/product-types/${productType}/1`,
+        `/overview/product-types/${productType}`,
     generateSpecificMetalTypeLink: (metalType: string): string =>
-        `/overview/metal-types/${metalType}/1`,
+        `/overview/metal-types/${metalType}`,
     generateSpecificPlatingTypeLink: (platingType: string): string =>
-        `/overview/plating-types/${platingType}/1`,
+        `/overview/plating-types/${platingType}`,
 };
 
 export const ProductUtils = {
@@ -36,7 +34,7 @@ export const ProductUtils = {
         return metalType;
     },
 
-    getPlatingFromSku: (sku: string): string => {
+    getPlatingTypeFromSku: (sku: string): string => {
         const metalPlatingCode = sku.substring(2, 4);
         const { plating = PLATING.UNKNOWN } =
             METAL_PLATING_MAP[metalPlatingCode] || {};
@@ -47,7 +45,7 @@ export const ProductUtils = {
         return {
             productType: ProductUtils.getProductTypeFromSku(sku),
             metalType: ProductUtils.getMetalTypeFromSku(sku),
-            plating: ProductUtils.getPlatingFromSku(sku),
+            plating: ProductUtils.getPlatingTypeFromSku(sku),
         };
     },
 };

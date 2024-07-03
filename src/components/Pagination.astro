@@ -1,18 +1,22 @@
 ---
 type Props = {
-    prevURL?: string;
-    nextURL?: string;
+    page: number;
+    totalPages: number;
+    prefix?: string;
 };
 
-const { prevURL, nextURL } = Astro.props;
+const { page, totalPages, prefix = "" } = Astro.props;
+
+const hasPreviousProducts = page > 1;
+const hasNextProducts = totalPages > page;
 ---
 
 <div class="flex justify-between">
     {
-        prevURL && (
+        hasPreviousProducts && (
             <a
                 class="bg-sky-900 text-white py-1 px-3 rounded-lg text-lg"
-                href={prevURL}
+                href={`${prefix}?page=${page - 1}`}
             >
                 ←
             </a>
@@ -20,10 +24,10 @@ const { prevURL, nextURL } = Astro.props;
     }
     <div class="flex-grow"></div>
     {
-        nextURL && (
+        hasNextProducts && (
             <a
                 class="bg-sky-900 text-white py-1 px-3 rounded-lg text-lg"
-                href={nextURL}
+                href={`${prefix}?page=${page + 1}`}
             >
                 →
             </a>

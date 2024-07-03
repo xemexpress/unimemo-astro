@@ -6,53 +6,49 @@ import H1 from "./H1.astro";
 import Main from "./Main.astro";
 import Pagination from "./Pagination.astro";
 import ProductList from "./ProductList.astro";
-import type { Page } from "astro";
 import ProductFilter from "./ProductFilter.astro";
+import BackToAllProducts from "./BackToAllProducts.astro";
 
 type Props = {
     title: string;
     description?: string;
-    page: Page;
+    products: CollectionEntry<"products">[];
+    page: number;
+    totalPages: number;
     byCategory?: boolean;
 };
 const {
     title,
-    page,
     description = OUR_BRAND.DESCRIPTION,
+    products,
+    totalPages,
+    page,
     byCategory = false,
 } = Astro.props;
-
-const products = page.data as CollectionEntry<"products">[];
 ---
 
 <Layout title=`${title} | ${OUR_BRAND.NAME}` description={description}>
     <Main>
         <H1 title={title} />
 
-        {
-            byCategory && (
-                <a class="text-sky-500 text-lg underline block mb-4" href="/">
-                    Back to all products
-                </a>
-            )
-        }
+        {byCategory && <BackToAllProducts />}
         <div class="mb-12">
-            <Pagination prevURL={page.url.prev} nextURL={page.url.next} />
+            <Pagination page={page} totalPages={totalPages} />
         </div>
 
         <ProductList products={products} />
 
-        <div class="my-12">
-            <Pagination prevURL={page.url.prev} nextURL={page.url.next} />
+        <div class="mt-12">
+            <Pagination page={page} totalPages={totalPages} />
         </div>
 
         {
             byCategory ? (
-                <a class="text-sky-500 text-lg underline block mb-4" href="/">
-                    Back to all products
-                </a>
+                <BackToAllProducts />
             ) : (
-                <ProductFilter />
+                <div class="my-12">
+                    <ProductFilter />
+                </div>
             )
         }
     </Main>

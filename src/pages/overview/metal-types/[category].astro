@@ -1,14 +1,46 @@
 ---
-import type { GetStaticPaths } from "astro";
-import { METAL } from "../../../utils/constants";
+import { getCollection } from "astro:content";
+import ProductListView from "../../../components/ProductListView.astro";
+import { METAL, UI } from "../../../utils/constants";
+import { ProductUtils, StringUtils, SEOUtils } from "../../../utils/coreUtils";
+import MetalType404 from "../../../components/MetalType404.astro";
+import type { CollectionEntry } from "astro:content";
 
-export const getStaticPaths = (() => {
-    return METAL.ALL_TYPES.map((metalType) => ({
-        params: { category: metalType },
-    }));
-}) satisfies GetStaticPaths;
+const metalType = Astro.params.category as string;
 
-const { category } = Astro.params;
+const isValidMetalType = METAL.ALL_TYPES.includes(metalType);
 
-return Astro.redirect(`/overview/metal-types/${category}/1`);
+let title, seoDescription, products, totalPages, page;
+
+if (isValidMetalType) {
+    page = Number(Astro.url.searchParams.get("page")) || 1;
+    const start = (page - 1) * UI.PRODUCTS_PER_PAGE;
+    const end = start + UI.PRODUCTS_PER_PAGE;
+
+    title = StringUtils.capitalizeFirstLetter(metalType);
+    seoDescription = SEOUtils.generateProductListCategoryDescription(metalType);
+    const productsByCategory = (await getCollection("products")).filter(
+        (product) =>
+            ProductUtils.getMetalTypeFromSku(product.data.sku) === metalType
+    );
+    products = productsByCategory
+        .sort((a, b) => a.data.price - b.data.price)
+        .slice(start, end);
+    totalPages = Math.ceil(productsByCategory.length / UI.PRODUCTS_PER_PAGE);
+}
 ---
+
+{
+    isValidMetalType ? (
+        <ProductListView
+            title={title as string}
+            description={seoDescription as string}
+            products={products as CollectionEntry<"products">[]}
+            page={page as number}
+            totalPages={totalPages as number}
+            byCategory={true}
+        />
+    ) : (
+        <MetalType404 invalidMetalType={metalType} />
+    )
+}

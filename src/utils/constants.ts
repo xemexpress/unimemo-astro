@@ -1,3 +1,5 @@
+const ENV_PRODUCT_PER_PAGE = Number(import.meta.env.PRODUCTS_PER_PAGE);
+
 export const OUR_BRAND = {
     NAME: "UniMemo",
     MISSION: "Inspire the next jewelry",
@@ -11,7 +13,7 @@ export const OUR_BRAND = {
 };
 
 export const UI = {
-    PRODUCTS_PER_PAGE: 12,
+    PRODUCTS_PER_PAGE: ENV_PRODUCT_PER_PAGE || 12,
 };
 
 export const PRODUCT = {

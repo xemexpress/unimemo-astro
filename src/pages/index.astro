@@ -8,7 +8,9 @@ import { OUR_BRAND, UI } from "../utils/constants";
 import Pagination from "../components/Pagination.astro";
 import ProductFilter from "../components/ProductFilter.astro";
 
-const products = (await getCollection("products"))
+const allProducts = await getCollection("products");
+const totalPages = Math.ceil(allProducts.length / UI.PRODUCTS_PER_PAGE);
+const products = allProducts
     .filter((product) => product.data.isAvailable)
     .sort((a, b) => a.data.price - b.data.price)
     .slice(0, UI.PRODUCTS_PER_PAGE);
@@ -22,13 +24,15 @@ const description = OUR_BRAND.DESCRIPTION;
         <H1 title="價目單" />
 
         <div class="mb-12">
-            <Pagination nextURL="/overview/2" />
+            <Pagination prefix="/overview" page={1} totalPages={totalPages} />
         </div>
         <ProductList products={products} />
         <div class="my-12">
-            <Pagination nextURL="/overview/2" />
+            <Pagination prefix="/overview" page={1} totalPages={totalPages} />
         </div>
 
-        <ProductFilter />
+        <div class="mb-10">
+            <ProductFilter />
+        </div>
     </Main>
 </Layout>

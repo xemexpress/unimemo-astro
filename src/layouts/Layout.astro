@@ -20,6 +20,9 @@ type Props = {
 };
 
 const { title, description, type = "website", image, product } = Astro.props;
+const brandedTitle = title.toLowerCase().includes(OUR_BRAND.NAME.toLowerCase())
+    ? title
+    : `${title} | ${OUR_BRAND.NAME}`;
 
 const finalImageSrc = (
     await getImage({
@@ -55,11 +58,11 @@ const faviconSrcPNG = (
         <meta name="generator" content={Astro.generator} />
 
         <SEO
-            title={title}
+            title={brandedTitle}
             description={description}
             openGraph={{
                 basic: {
-                    title: title,
+                    title: brandedTitle,
                     type: type,
                     image: finalImageSrc,
                     url: Astro.url,
@@ -77,7 +80,7 @@ const faviconSrcPNG = (
                 card: "summary_large_image",
                 site: Astro.url.href,
                 creator: "@xemexpress",
-                title: title,
+                title: brandedTitle,
                 description: description,
                 image: finalImageSrc,
                 imageAlt: description,

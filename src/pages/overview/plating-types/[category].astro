@@ -1,14 +1,47 @@
 ---
-import type { GetStaticPaths } from "astro";
-import { PLATING } from "../../../utils/constants";
+import { getCollection } from "astro:content";
+import ProductListView from "../../../components/ProductListView.astro";
+import { PLATING, UI } from "../../../utils/constants";
+import { ProductUtils, StringUtils, SEOUtils } from "../../../utils/coreUtils";
+import PlatingType404 from "../../../components/PlatingType404.astro";
+import type { CollectionEntry } from "astro:content";
 
-export const getStaticPaths = (() => {
-    return PLATING.ALL_TYPES.map((platingType) => ({
-        params: { category: platingType },
-    }));
-}) satisfies GetStaticPaths;
+const platingType = Astro.params.category as string;
 
-const { category } = Astro.params;
+const isValidPlatingType = PLATING.ALL_TYPES.includes(platingType);
 
-return Astro.redirect(`/overview/plating-types/${category}/1`);
+let title, seoDescription, products, totalPages, page;
+
+if (isValidPlatingType) {
+    page = Number(Astro.url.searchParams.get("page")) || 1;
+    const start = (page - 1) * UI.PRODUCTS_PER_PAGE;
+    const end = start + UI.PRODUCTS_PER_PAGE;
+
+    title = StringUtils.capitalizeFirstLetter(platingType);
+    seoDescription =
+        SEOUtils.generateProductListCategoryDescription(platingType);
+    const productsByCategory = (await getCollection("products")).filter(
+        (product) =>
+            ProductUtils.getPlatingTypeFromSku(product.data.sku) === platingType
+    );
+    products = productsByCategory
+        .sort((a, b) => a.data.price - b.data.price)
+        .slice(start, end);
+    totalPages = Math.ceil(productsByCategory.length / UI.PRODUCTS_PER_PAGE);
+}
 ---
+
+{
+    isValidPlatingType ? (
+        <ProductListView
+            title={title as string}
+            description={seoDescription as string}
+            products={products as CollectionEntry<"products">[]}
+            page={page as number}
+            totalPages={totalPages as number}
+            byCategory={true}
+        />
+    ) : (
+        <PlatingType404 invalidPlatingType={platingType} />
+    )
+}

@@ -1,3 +1,26 @@
 ---
-return Astro.redirect("/overview/1");
+import { getCollection } from "astro:content";
+import ProductListView from "../components/ProductListView.astro";
+import { UI, OUR_BRAND } from "../utils/constants";
+
+const page = Number(Astro.url.searchParams.get("page")) || 1;
+const start = (page - 1) * UI.PRODUCTS_PER_PAGE;
+const end = start + UI.PRODUCTS_PER_PAGE;
+
+const title = "價目單";
+const allProducts = (await getCollection("products")).filter(
+    (product) => product.data.isAvailable
+);
+const totalPages = Math.ceil(allProducts.length / UI.PRODUCTS_PER_PAGE);
+const products = allProducts
+    .sort((a, b) => a.data.price - b.data.price)
+    .slice(start, end);
 ---
+
+<ProductListView
+    title={title}
+    description={OUR_BRAND.DESCRIPTION}
+    products={products}
+    totalPages={totalPages}
+    page={page}
+/>

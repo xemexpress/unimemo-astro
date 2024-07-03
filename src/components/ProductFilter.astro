@@ -5,25 +5,23 @@ import CategoryFilter from "./CategoryFilter.astro";
 import ProductFilterUnit from "./ProductFilterUnit.astro";
 ---
 
-<div class="mb-10">
-    <ProductFilterUnit title="Product types">
-        <CategoryFilter
-            categories={PRODUCT.ALL_TYPES}
-            generateLink={LinkUtils.generateSpecificProductTypeLink}
-        />
-    </ProductFilterUnit>
+<ProductFilterUnit title="Product types">
+    <CategoryFilter
+        categories={PRODUCT.ALL_TYPES}
+        generateLink={LinkUtils.generateSpecificProductTypeLink}
+    />
+</ProductFilterUnit>
 
-    <ProductFilterUnit title="Metal types">
-        <CategoryFilter
-            categories={METAL.ALL_TYPES}
-            generateLink={LinkUtils.generateSpecificMetalTypeLink}
-        />
-    </ProductFilterUnit>
+<ProductFilterUnit title="Metal types">
+    <CategoryFilter
+        categories={METAL.ALL_TYPES}
+        generateLink={LinkUtils.generateSpecificMetalTypeLink}
+    />
+</ProductFilterUnit>
 
-    <ProductFilterUnit title="Plating types">
-        <CategoryFilter
-            categories={PLATING.ALL_TYPES}
-            generateLink={LinkUtils.generateSpecificPlatingTypeLink}
-        />
-    </ProductFilterUnit>
-</div>
+<ProductFilterUnit title="Plating types">
+    <CategoryFilter
+        categories={PLATING.ALL_TYPES}
+        generateLink={LinkUtils.generateSpecificPlatingTypeLink}
+    />
+</ProductFilterUnit>

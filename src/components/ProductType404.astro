@@ -1,0 +1,58 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Main from "./Main.astro";
+import H1 from "./H1.astro";
+import BackToAllProducts from "./BackToAllProducts.astro";
+
+interface Props {
+    invalidProductType: string;
+}
+
+const { invalidProductType } = Astro.props;
+---
+
+<Layout
+    title="Product Type Not Found"
+    description="This is not the product type you're looking for"
+>
+    <Main>
+        <div
+            class="flex flex-col items-center justify-center min-h-[70vh] text-center"
+        >
+            <div class="text-sky-500 mb-6">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="w-24 h-24"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
+                    ></path>
+                </svg>
+            </div>
+            <H1 title="Product Type Not Found" />
+            <div class="max-w-2xl mx-auto mt-8">
+                <p class="text-2xl font-light mb-6 italic text-sky-700">
+                    "These aren't the products you're looking for."
+                </p>
+                <p class="text-lg mb-4 text-gray-700">
+                    It seems that <span class="font-semibold text-sky-600"
+                        >"{invalidProductType}"</span
+                    > is not a product type in our collection.
+                </p>
+                <p class="text-lg mb-8 text-gray-700">
+                    Perhaps our product catalog is taking a break, or this type
+                    exists only in a galaxy far, far away.
+                </p>
+                <div class="mt-12">
+                    <BackToAllProducts />
+                </div>
+            </div>
+        </div>
+    </Main>
+</Layout>
