@@ -13,10 +13,12 @@ const { product } = Astro.props;
 const { images, sku, unit, price, isAvailable } = product.data;
 
 const { productType } = ProductUtils.deriveProductInfo(sku);
+
+const currentPage = Astro.url.searchParams.get("page") || 1;
 ---
 
-<article class="group transition-all duration-300 ease-in-out">
-    <a href={`/products/${product.slug}`}>
+<article class="group transition-all duration-300 ease-in-out" id={sku}>
+    <a href={`/products/${product.slug}?p=${currentPage}`}>
         <Image
             class="rounded-lg aspect-square transition-transform duration-300 ease-in-out group-hover:scale-105 group-hover:shadow-md"
             src={images[0]}

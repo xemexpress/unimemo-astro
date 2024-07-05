@@ -52,7 +52,7 @@ const coverImageSrc = (await getImage({ src: images[0], format: "jpg" })).src;
     <Main>
         <H1 title={title} />
 
-        <BackToAllProducts />
+        <BackToAllProducts sku={sku} />
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <!-- Product Image -->
@@ -229,6 +229,6 @@ const coverImageSrc = (await getImage({ src: images[0], format: "jpg" })).src;
                 </div>
             )
         }
-        <BackToAllProducts />
+        <BackToAllProducts sku={sku} />
     </Main>
 </Layout>

@@ -1,3 +1,16 @@
-<a class="text-sky-700 text-lg underline block my-7" href="/overview">
+---
+type Props = {
+    sku?: string;
+};
+
+const { sku } = Astro.props;
+
+const page = Astro.url.searchParams.get("p") || 1;
+---
+
+<a
+    class="text-sky-700 text-lg underline block my-7"
+    href={`/overview?page=${page}${sku ? `#${sku}` : ""}`}
+>
     Back to all products
 </a>
