@@ -10,15 +10,48 @@ export const StringUtils = {
     capitalizeFirstLetter: (s: string): string => {
         return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
     },
+    normalizeString: (str: string): string => {
+        return str
+            .replace(/\+/g, " ")
+            .replace(/[^\w\s]/gi, "")
+            .toLowerCase(); // Remove plus signs
+    },
 };
-
 export const LinkUtils = {
-    generateSpecificProductTypeLink: (productType: string): string =>
-        `/overview/product-types/${productType}`,
-    generateSpecificMetalTypeLink: (metalType: string): string =>
-        `/overview/metal-types/${metalType}`,
-    generateSpecificPlatingTypeLink: (platingType: string): string =>
-        `/overview/plating-types/${platingType}`,
+    generateLink: (params: Record<string, string>): string => {
+        const searchParams = new URLSearchParams();
+        for (const [key, value] of Object.entries(params)) {
+            searchParams.append(key, value);
+        }
+        return `?${searchParams.toString()}`;
+    },
+
+    generateSpecificProductTypeLink: (
+        productType: string,
+        existingParams?: URLSearchParams
+    ): string => {
+        const params = new URLSearchParams(existingParams);
+        params.set("product-type", productType);
+        return `?${params.toString()}`;
+    },
+
+    generateSpecificMetalTypeLink: (
+        metalType: string,
+        existingParams?: URLSearchParams
+    ): string => {
+        const params = new URLSearchParams(existingParams);
+        params.set("metal-type", metalType);
+        return `?${params.toString()}`;
+    },
+
+    generateSpecificPlatingTypeLink: (
+        platingType: string,
+        existingParams?: URLSearchParams
+    ): string => {
+        const params = new URLSearchParams(existingParams);
+        params.set("plating-type", platingType);
+        return `?${params.toString()}`;
+    },
 };
 
 export const ProductUtils = {
@@ -47,6 +80,56 @@ export const ProductUtils = {
             metalType: ProductUtils.getMetalTypeFromSku(sku),
             plating: ProductUtils.getPlatingTypeFromSku(sku),
         };
+    },
+
+    matchesProductType: (sku: string, productType: string | null): boolean => {
+        if (!productType) return true; // If no filter is applied, return true
+
+        const skuProductType = ProductUtils.getProductTypeFromSku(sku);
+        const normalizedSkuProductType =
+            StringUtils.normalizeString(skuProductType);
+        const normalizedFilterProductType =
+            StringUtils.normalizeString(productType);
+
+        return normalizedSkuProductType === normalizedFilterProductType;
+    },
+
+    matchesMetalType: (sku: string, metalType: string | null): boolean => {
+        if (!metalType) return true; // If no filter is applied, return true
+
+        const skuMetalType = ProductUtils.getMetalTypeFromSku(sku);
+        const normalizedSkuMetalType =
+            StringUtils.normalizeString(skuMetalType);
+        const normalizedFilterMetalType =
+            StringUtils.normalizeString(metalType);
+
+        return normalizedSkuMetalType === normalizedFilterMetalType;
+    },
+
+    matchesPlatingType: (sku: string, platingType: string | null): boolean => {
+        if (!platingType) return true; // If no filter is applied, return true
+
+        const skuPlatingType = ProductUtils.getPlatingTypeFromSku(sku);
+        const normalizedSkuPlatingType =
+            StringUtils.normalizeString(skuPlatingType);
+        const normalizedFilterPlatingType =
+            StringUtils.normalizeString(platingType);
+
+        return normalizedSkuPlatingType === normalizedFilterPlatingType;
+    },
+
+    // Combined filter function
+    matchesAllFilters: (
+        sku: string,
+        productType: string | null,
+        metalType: string | null,
+        platingType: string | null
+    ): boolean => {
+        return (
+            ProductUtils.matchesProductType(sku, productType) &&
+            ProductUtils.matchesMetalType(sku, metalType) &&
+            ProductUtils.matchesPlatingType(sku, platingType)
+        );
     },
 };
 

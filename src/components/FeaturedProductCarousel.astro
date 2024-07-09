@@ -1,0 +1,136 @@
+---
+import type { CollectionEntry } from "astro:content";
+import ProductCard from "./ProductCard.astro";
+
+interface Props {
+    products: CollectionEntry<"products">[];
+}
+
+const { products } = Astro.props;
+---
+
+<div class="relative px-2">
+    <div class="overflow-x-auto pb-4 scrollbar-hide" id="carousel">
+        <div class="flex space-x-3 pr-3">
+            {
+                products.map((product) => (
+                    <div class="w-[calc(20%-12px)] min-w-[200px] flex-shrink-0">
+                        <ProductCard product={product} />
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+    <div class="absolute -left-1 top-1/2 transform -translate-y-1/2 z-10">
+        <button id="prevBtn" class="carousel-btn" aria-label="Previous product">
+            <svg class="w-8 h-8" viewBox="0 0 50 50">
+                <circle
+                    class="btn-bg"
+                    cx="25"
+                    cy="25"
+                    r="23"
+                    fill="#f0f0f0"
+                    stroke="#e0e0e0"
+                    stroke-width="1"></circle>
+                <path
+                    id="prevArrow"
+                    d="M28 18l-8 7 8 7"
+                    fill="none"
+                    stroke="#ffad30"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"></path>
+            </svg>
+        </button>
+    </div>
+    <div class="absolute -right-1 top-1/2 transform -translate-y-1/2 z-10">
+        <button id="nextBtn" class="carousel-btn" aria-label="Next product">
+            <svg class="w-8 h-8" viewBox="0 0 50 50">
+                <circle
+                    class="btn-bg"
+                    cx="25"
+                    cy="25"
+                    r="23"
+                    fill="#f0f0f0"
+                    stroke="#e0e0e0"
+                    stroke-width="1"></circle>
+                <path
+                    id="nextArrow"
+                    d="M22 18l8 7-8 7"
+                    fill="none"
+                    stroke="#ffad30"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"></path>
+            </svg>
+        </button>
+    </div>
+</div>
+
+<style>
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
+    .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    .carousel-btn {
+        transition: all 0.3s ease;
+        opacity: 0.7;
+        background-color: rgba(255, 255, 255, 0.8);
+        border-radius: 50%;
+        padding: 4px;
+    }
+    .carousel-btn:hover {
+        opacity: 1;
+        transform: scale(1.05);
+        background-color: rgba(255, 255, 255, 1);
+    }
+    .carousel-btn:active {
+        transform: scale(0.95);
+    }
+    .btn-bg {
+        transition: fill 0.3s ease;
+    }
+    .carousel-btn:hover .btn-bg {
+        fill: #ffffff;
+    }
+</style>
+
+<script>
+    const carousel = document.getElementById("carousel") as HTMLElement;
+    const prevBtn = document.getElementById("prevBtn") as HTMLButtonElement;
+    const nextBtn = document.getElementById("nextBtn") as HTMLButtonElement;
+    const prevArrow = document.getElementById("prevArrow") as any;
+    const nextArrow = document.getElementById("nextArrow") as any;
+
+    const scrollAmount = 200;
+
+    function updateButtonStates() {
+        const isAtStart = carousel.scrollLeft <= 0;
+        const isAtEnd =
+            carousel.scrollLeft >=
+            carousel.scrollWidth - carousel.clientWidth - 1;
+
+        prevArrow.style.stroke = isAtStart ? "#cccccc" : "#ffad30";
+        nextArrow.style.stroke = isAtEnd ? "#cccccc" : "#ffad30";
+
+        prevBtn.style.cursor = isAtStart ? "default" : "pointer";
+        nextBtn.style.cursor = isAtEnd ? "default" : "pointer";
+    }
+
+    prevBtn.addEventListener("click", () => {
+        carousel.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+    });
+
+    nextBtn.addEventListener("click", () => {
+        carousel.scrollBy({ left: scrollAmount, behavior: "smooth" });
+    });
+
+    carousel.addEventListener("scroll", updateButtonStates);
+    window.addEventListener("resize", updateButtonStates);
+
+    // Initial button states
+    updateButtonStates();
+</script>

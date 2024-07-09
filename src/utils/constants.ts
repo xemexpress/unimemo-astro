@@ -48,8 +48,8 @@ export const METAL = {
 
 export const PLATING = {
     TYPES: {
-        YELLOW_GOLD_WITH_E_COATING: "14K yellow gold plated + E-coating",
-        WHITE_GOLD: "White gold (Rhodium) plated",
+        YELLOW_GOLD_WITH_E_COATING: "14K yellow gold plated + e-coating",
+        WHITE_GOLD: "white gold (Rhodium) plated",
     },
     get CODES() {
         return {

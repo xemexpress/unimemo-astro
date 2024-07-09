@@ -17,8 +17,14 @@ const { productType } = ProductUtils.deriveProductInfo(sku);
 const currentPage = Astro.url.searchParams.get("page") || 1;
 ---
 
-<article class="group transition-all duration-300 ease-in-out" id={sku}>
-    <a href={`/products/${product.slug}?p=${currentPage}`}>
+<article
+    class="group relative transition-all duration-300 ease-in-out overflow-hidden rounded-lg"
+    id={sku}
+>
+    <a
+        href={`/products/${product.slug}?p=${currentPage}`}
+        class="block relative"
+    >
         <Image
             class="rounded-lg aspect-square transition-transform duration-300 ease-in-out group-hover:scale-105 group-hover:shadow-md"
             src={images[0]}
@@ -26,11 +32,27 @@ const currentPage = Astro.url.searchParams.get("page") || 1;
             width={400}
             height={400}
         />
+        <div
+            class="absolute top-2 left-2 bg-white bg-opacity-75 px-2 py-1 rounded text-xs text-sky-900 capitalize"
+        >
+            {productType}
+        </div>
+        <div
+            class="absolute top-2 right-2 bg-white bg-opacity-75 px-2 py-1 rounded text-xs"
+        >
+            {sku}
+        </div>
+        <div
+            class="absolute bottom-2 left-2 bg-white bg-opacity-75 px-2 py-1 rounded text-xs"
+        >
+            HK${price}/{unit}
+        </div>
+        {
+            !isAvailable && (
+                <div class="absolute bottom-2 right-2 bg-red-500 bg-opacity-75 px-2 py-1 rounded text-xs text-white">
+                    Out of Stock
+                </div>
+            )
+        }
     </a>
-    <div class="text-center capitalize text-xs text-sky-900 mt-2">
-        {productType}
-    </div>
-    <div class="text-center leading-snug">{sku}</div>
-    <div class="text-center">HK${price}/{unit}</div>
-    {!isAvailable && <div class="text-center text-red-500">Out of Stock</div>}
 </article>

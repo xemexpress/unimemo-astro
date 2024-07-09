@@ -8,29 +8,51 @@ type Props = {
 const { page, totalPages, prefix = "" } = Astro.props;
 
 const hasPreviousProducts = page > 1;
-const hasNextProducts = totalPages > page;
+const hasNextProducts = page < totalPages;
 ---
 
-<div class="flex justify-between">
-    {
-        hasPreviousProducts && (
-            <a
-                class="bg-sky-900 text-white py-1 px-3 rounded-lg text-lg"
-                href={`${prefix}?page=${page - 1}`}
+<nav class="flex justify-center my-6" aria-label="Product list navigation">
+    <div
+        class="flex items-center bg-sky-50 rounded-full px-3 py-1 shadow-sm transition-shadow hover:shadow-md"
+    >
+        <a
+            class={`p-1 rounded-full transition-colors ${hasPreviousProducts ? "text-sky-700 hover:bg-sky-700 hover:text-white" : "text-gray-400 cursor-not-allowed"}`}
+            href={hasPreviousProducts ? `${prefix}?page=${page - 1}` : "#"}
+            aria-disabled={!hasPreviousProducts}
+        >
+            <span class="sr-only">Previous Page</span>
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-4 w-4"
+                viewBox="0 0 20 20"
+                fill="currentColor"
             >
-                ←
-            </a>
-        )
-    }
-    <div class="flex-grow"></div>
-    {
-        hasNextProducts && (
-            <a
-                class="bg-sky-900 text-white py-1 px-3 rounded-lg text-lg"
-                href={`${prefix}?page=${page + 1}`}
+                <path
+                    fill-rule="evenodd"
+                    d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                    clip-rule="evenodd"></path>
+            </svg>
+        </a>
+        <span class="mx-2 text-xs text-sky-700">
+            Page <span class="font-bold">{page}</span> of {totalPages}
+        </span>
+        <a
+            class={`p-1 rounded-full transition-colors ${hasNextProducts ? "text-sky-700 hover:bg-sky-700 hover:text-white" : "text-gray-400 cursor-not-allowed"}`}
+            href={hasNextProducts ? `${prefix}?page=${page + 1}` : "#"}
+            aria-disabled={!hasNextProducts}
+        >
+            <span class="sr-only">Next Page</span>
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-4 w-4"
+                viewBox="0 0 20 20"
+                fill="currentColor"
             >
-                →
-            </a>
-        )
-    }
-</div>
+                <path
+                    fill-rule="evenodd"
+                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                    clip-rule="evenodd"></path>
+            </svg>
+        </a>
+    </div>
+</nav>

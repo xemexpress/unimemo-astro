@@ -1,27 +1,175 @@
 ---
+// ProductFilter.astro
 import { METAL, PLATING, PRODUCT } from "../utils/constants";
-import { LinkUtils } from "../utils/coreUtils";
-import CategoryFilter from "./CategoryFilter.astro";
-import ProductFilterUnit from "./ProductFilterUnit.astro";
+import { LinkUtils, StringUtils } from "../utils/coreUtils";
+
+type FilterCategory = {
+    title: string;
+    categories: string[];
+    generateLink: (category: string, params: URLSearchParams) => string;
+    paramName: string;
+    disabled?: boolean;
+};
+
+const currentSearchParams = Astro.url.searchParams;
+const selectedProductType = currentSearchParams.get("product-type");
+const isPackagingSelected = selectedProductType === "packaging";
+
+const generateProductTypeLink = (category: string, params: URLSearchParams) => {
+    const newParams = new URLSearchParams(params);
+    if (category === "packaging") {
+        newParams.delete("metal-type");
+        newParams.delete("plating-type");
+    }
+    newParams.set("product-type", category);
+    return `?${newParams.toString()}`;
+};
+
+const filterCategories: FilterCategory[] = [
+    {
+        title: "Product types",
+        categories: PRODUCT.ALL_TYPES,
+        generateLink: generateProductTypeLink,
+        paramName: "product-type",
+    },
+    {
+        title: "Metal types",
+        categories: METAL.ALL_TYPES,
+        generateLink: LinkUtils.generateSpecificMetalTypeLink,
+        paramName: "metal-type",
+        disabled: isPackagingSelected,
+    },
+    {
+        title: "Plating types",
+        categories: PLATING.ALL_TYPES,
+        generateLink: LinkUtils.generateSpecificPlatingTypeLink,
+        paramName: "plating-type",
+        disabled: isPackagingSelected,
+    },
+];
+
+const activeFilters = filterCategories
+    .map((category) => ({
+        paramName: category.paramName,
+        value: currentSearchParams.get(category.paramName) || "",
+    }))
+    .filter((filter) => filter.value);
+
+if (isPackagingSelected) {
+    currentSearchParams.delete("metal-type");
+    currentSearchParams.delete("plating-type");
+}
 ---
 
-<ProductFilterUnit title="Product types">
-    <CategoryFilter
-        categories={PRODUCT.ALL_TYPES}
-        generateLink={LinkUtils.generateSpecificProductTypeLink}
-    />
-</ProductFilterUnit>
+<div class="bg-white shadow rounded-lg p-4 mb-6">
+    <h2 class="text-xl font-semibold mb-4 flex justify-between items-center">
+        Filters
+        {
+            activeFilters.length > 0 && (
+                <span class="text-sm font-normal text-gray-500">
+                    {activeFilters.length} active
+                </span>
+            )
+        }
+    </h2>
+    {
+        filterCategories.map((category) => (
+            <details class="mb-4" data-category={category.paramName}>
+                <summary
+                    class={`font-medium text-lg cursor-pointer transition-colors ${
+                        category.disabled
+                            ? "text-gray-400"
+                            : "hover:text-sky-600"
+                    }`}
+                >
+                    {category.title}
+                    {!category.disabled && (
+                        <span class="text-sm font-normal text-gray-500 ml-2">
+                            {StringUtils.capitalizeFirstLetter(
+                                currentSearchParams.get(category.paramName) ??
+                                    "any"
+                            )}
+                        </span>
+                    )}
+                </summary>
+                {!category.disabled && (
+                    <div class="mt-2 flex flex-wrap gap-2">
+                        {category.categories.map((item) => {
+                            const isActive =
+                                currentSearchParams.get(category.paramName) ===
+                                item;
+                            const linkParams = new URLSearchParams(
+                                currentSearchParams
+                            );
+                            if (isActive) {
+                                linkParams.delete(category.paramName);
+                            } else {
+                                linkParams.set(category.paramName, item);
+                            }
+                            const href = isActive
+                                ? `?${linkParams.toString()}`
+                                : category.generateLink(
+                                      item,
+                                      currentSearchParams
+                                  );
+                            return (
+                                <a
+                                    href={href}
+                                    class={`px-3 py-1 rounded-full text-sm capitalize transition-colors duration-300 ${
+                                        isActive
+                                            ? "bg-sky-600 text-white"
+                                            : "bg-gray-200 text-gray-800 hover:bg-sky-500 hover:text-white"
+                                    }`}
+                                >
+                                    {item}
+                                    {isActive && <span class="ml-1">✕</span>}
+                                </a>
+                            );
+                        })}
+                    </div>
+                )}
+            </details>
+        ))
+    }
+    {
+        activeFilters.length > 0 && (
+            <a
+                href="/overview"
+                class="text-sky-600 hover:text-sky-800 transition-colors text-sm"
+            >
+                Clear all filters
+            </a>
+        )
+    }
+</div>
 
-<ProductFilterUnit title="Metal types">
-    <CategoryFilter
-        categories={METAL.ALL_TYPES}
-        generateLink={LinkUtils.generateSpecificMetalTypeLink}
-    />
-</ProductFilterUnit>
+<style>
+    details > summary {
+        list-style: none;
+    }
+    details > summary::-webkit-details-marker {
+        display: none;
+    }
+    details > summary::after {
+        content: "+";
+        float: right;
+    }
+    details[open] > summary::after {
+        content: "−";
+    }
+</style>
 
-<ProductFilterUnit title="Plating types">
-    <CategoryFilter
-        categories={PLATING.ALL_TYPES}
-        generateLink={LinkUtils.generateSpecificPlatingTypeLink}
-    />
-</ProductFilterUnit>
+<script>
+    // Open the details elements for categories with active filters
+    document.addEventListener("DOMContentLoaded", () => {
+        const activeFilters = new URLSearchParams(window.location.search);
+        activeFilters.forEach((value, key) => {
+            const details = document.querySelector(
+                `details[data-category="${key}"]`
+            );
+            if (details) {
+                details.setAttribute("open", "");
+            }
+        });
+    });
+</script>

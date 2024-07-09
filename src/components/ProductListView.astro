@@ -7,7 +7,6 @@ import Main from "./Main.astro";
 import Pagination from "./Pagination.astro";
 import ProductList from "./ProductList.astro";
 import ProductFilter from "./ProductFilter.astro";
-import BackToAllProducts from "./BackToAllProducts.astro";
 
 type Props = {
     title: string;
@@ -23,15 +22,15 @@ const {
     products,
     totalPages,
     page,
-    byCategory = false,
 } = Astro.props;
 ---
 
 <Layout title=`${title} | ${OUR_BRAND.NAME}` description={description}>
     <Main>
-        <H1 title={title} />
+        <div class="mt-10">
+            <H1 title={title} />
+        </div>
 
-        {byCategory && <BackToAllProducts />}
         <div class="mb-12">
             <Pagination page={page} totalPages={totalPages} />
         </div>
@@ -42,14 +41,6 @@ const {
             <Pagination page={page} totalPages={totalPages} />
         </div>
 
-        {
-            byCategory ? (
-                <BackToAllProducts />
-            ) : (
-                <div class="my-12">
-                    <ProductFilter />
-                </div>
-            )
-        }
+        <ProductFilter />
     </Main>
 </Layout>

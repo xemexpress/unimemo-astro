@@ -2,17 +2,37 @@
 import { getCollection } from "astro:content";
 import ProductListView from "../components/ProductListView.astro";
 import { UI, OUR_BRAND } from "../utils/constants";
+import { ProductUtils, StringUtils } from "../utils/coreUtils";
 
 const page = Number(Astro.url.searchParams.get("page")) || 1;
 const start = (page - 1) * UI.PRODUCTS_PER_PAGE;
 const end = start + UI.PRODUCTS_PER_PAGE;
 
-const title = "價目單";
-const allProducts = (await getCollection("products")).filter(
-    (product) => product.data.isAvailable
-);
+const allProducts = await getCollection("products");
 const totalPages = Math.ceil(allProducts.length / UI.PRODUCTS_PER_PAGE);
+
+const productType = Astro.url.searchParams.get("product-type");
+const metalType = Astro.url.searchParams.get("metal-type");
+const platingType = Astro.url.searchParams.get("plating-type");
+
+const title = `價目單${productType ? ` - ${StringUtils.capitalizeFirstLetter(productType)}` : ""}${
+    metalType ? ` - ${StringUtils.capitalizeFirstLetter(metalType)}` : ""
+}${platingType ? ` - ${StringUtils.capitalizeFirstLetter(platingType)}` : ""}`;
+
 const products = allProducts
+    .filter(
+        (product) =>
+            ProductUtils.matchesAllFilters(
+                product.data.sku,
+                productType,
+                metalType,
+                platingType
+            ) &&
+            (productType ||
+                metalType ||
+                platingType ||
+                product.data.isAvailable)
+    )
     .sort((a, b) => a.data.price - b.data.price)
     .slice(start, end);
 ---
