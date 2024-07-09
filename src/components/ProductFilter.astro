@@ -1,52 +1,45 @@
 ---
-// ProductFilter.astro
 import { METAL, PLATING, PRODUCT } from "../utils/constants";
-import { LinkUtils, StringUtils } from "../utils/coreUtils";
-
-type FilterCategory = {
-    title: string;
-    categories: string[];
-    generateLink: (category: string, params: URLSearchParams) => string;
-    paramName: string;
-    disabled?: boolean;
-};
+import { StringUtils } from "../utils/coreUtils";
 
 const currentSearchParams = Astro.url.searchParams;
-const selectedProductType = currentSearchParams.get("product-type");
-const isPackagingSelected = selectedProductType === "packaging";
+const isPackagingSelected =
+    currentSearchParams.get("product-type") === "packaging";
 
-const generateProductTypeLink = (category: string, params: URLSearchParams) => {
-    const newParams = new URLSearchParams(params);
-    if (category === "packaging") {
-        newParams.delete("metal-type");
-        newParams.delete("plating-type");
-    }
-    newParams.set("product-type", category);
-    return `?${newParams.toString()}`;
-};
-
-const filterCategories: FilterCategory[] = [
+const filterCategories = [
     {
         title: "Product types",
         categories: PRODUCT.ALL_TYPES,
-        generateLink: generateProductTypeLink,
         paramName: "product-type",
     },
     {
         title: "Metal types",
         categories: METAL.ALL_TYPES,
-        generateLink: LinkUtils.generateSpecificMetalTypeLink,
         paramName: "metal-type",
         disabled: isPackagingSelected,
     },
     {
         title: "Plating types",
         categories: PLATING.ALL_TYPES,
-        generateLink: LinkUtils.generateSpecificPlatingTypeLink,
         paramName: "plating-type",
         disabled: isPackagingSelected,
     },
 ];
+
+const generateLink = (category: string, paramName: string) => {
+    const params = new URLSearchParams(currentSearchParams);
+    if (params.get(paramName) === category) {
+        params.delete(paramName);
+    } else {
+        params.set(paramName, category);
+        if (paramName === "product-type" && category === "packaging") {
+            params.delete("metal-type");
+            params.delete("plating-type");
+        }
+    }
+    params.set("page", "1");
+    return `?${params.toString()}`;
+};
 
 const activeFilters = filterCategories
     .map((category) => ({
@@ -54,11 +47,6 @@ const activeFilters = filterCategories
         value: currentSearchParams.get(category.paramName) || "",
     }))
     .filter((filter) => filter.value);
-
-if (isPackagingSelected) {
-    currentSearchParams.delete("metal-type");
-    currentSearchParams.delete("plating-type");
-}
 ---
 
 <div class="bg-white shadow rounded-lg p-4 mb-6">
@@ -76,11 +64,7 @@ if (isPackagingSelected) {
         filterCategories.map((category) => (
             <details class="mb-4" data-category={category.paramName}>
                 <summary
-                    class={`font-medium text-lg cursor-pointer transition-colors ${
-                        category.disabled
-                            ? "text-gray-400"
-                            : "hover:text-sky-600"
-                    }`}
+                    class={`font-medium text-lg cursor-pointer transition-colors ${category.disabled ? "text-gray-400" : "hover:text-sky-600"}`}
                 >
                     {category.title}
                     {!category.disabled && (
@@ -98,20 +82,7 @@ if (isPackagingSelected) {
                             const isActive =
                                 currentSearchParams.get(category.paramName) ===
                                 item;
-                            const linkParams = new URLSearchParams(
-                                currentSearchParams
-                            );
-                            if (isActive) {
-                                linkParams.delete(category.paramName);
-                            } else {
-                                linkParams.set(category.paramName, item);
-                            }
-                            const href = isActive
-                                ? `?${linkParams.toString()}`
-                                : category.generateLink(
-                                      item,
-                                      currentSearchParams
-                                  );
+                            const href = generateLink(item, category.paramName);
                             return (
                                 <a
                                     href={href}
@@ -160,10 +131,9 @@ if (isPackagingSelected) {
 </style>
 
 <script>
-    // Open the details elements for categories with active filters
     document.addEventListener("DOMContentLoaded", () => {
         const activeFilters = new URLSearchParams(window.location.search);
-        activeFilters.forEach((value, key) => {
+        activeFilters.forEach((_, key) => {
             const details = document.querySelector(
                 `details[data-category="${key}"]`
             );
