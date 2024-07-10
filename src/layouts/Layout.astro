@@ -5,7 +5,8 @@ import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
 import { OUR_BRAND } from "../utils/constants";
 import { getImage } from "astro:assets";
-import logo from "../content/logo-bg.png";
+import logo from "../content/logo.png";
+import logoBg from "../content/logo-bg.png";
 
 type Props = {
     title: string;
@@ -39,7 +40,7 @@ const finalImageSrc = (
 // Also create a PNG version for broader support
 const faviconSrcPNG = (
     await getImage({
-        src: logo,
+        src: logoBg,
         width: 32,
         height: 32,
         format: "png",
