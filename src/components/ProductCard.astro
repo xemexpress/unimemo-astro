@@ -15,6 +15,9 @@ const { images, sku, unit, price, isAvailable } = product.data;
 const { productType } = ProductUtils.deriveProductInfo(sku);
 
 const currentPage = Astro.url.searchParams.get("page") || 1;
+const productT = Astro.url.searchParams.get("product-type") || "";
+const platingT = Astro.url.searchParams.get("plating-type") || "";
+const metalT = Astro.url.searchParams.get("metal-type") || "";
 ---
 
 <article
@@ -22,7 +25,7 @@ const currentPage = Astro.url.searchParams.get("page") || 1;
     id={sku}
 >
     <a
-        href={`/products/${product.slug}?p=${currentPage}`}
+        href={`/products/${product.slug}?p=${currentPage}${productT.length > 0 ? `&product-type=${productT}` : ""}${platingT.length > 0 ? `&plating-type=${platingT}` : ""}${metalT.length > 0 ? `&metal-type=${metalT}` : ""}`}
         class="block relative"
     >
         <Image

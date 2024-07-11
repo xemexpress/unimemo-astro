@@ -8,7 +8,7 @@ import { PRODUCT } from "../../utils/constants";
 import MarkdownIt from "markdown-it";
 import sanitizeHtml from "sanitize-html";
 import { getEntryBySlug } from "astro:content";
-import BackToAllProducts from "../../components/BackToAllProducts.astro";
+import Back from "../../components/Back.astro";
 
 const { slug } = Astro.params;
 const product = await getEntryBySlug("products", slug as string);
@@ -50,9 +50,11 @@ const coverImageSrc = (await getImage({ src: images[0], format: "jpg" })).src;
     product={{ sku: sku, price: `${price}`, currency: "HKD" }}
 >
     <Main>
-        <H1 title={title} />
+        <div class="mt-10">
+            <H1 title={title} />
+        </div>
 
-        <BackToAllProducts sku={sku} />
+        <Back sku={sku} />
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <!-- Product Image -->
@@ -229,6 +231,6 @@ const coverImageSrc = (await getImage({ src: images[0], format: "jpg" })).src;
                 </div>
             )
         }
-        <BackToAllProducts sku={sku} />
+        <Back sku={sku} />
     </Main>
 </Layout>
