@@ -51,6 +51,22 @@ const faviconSrcPNG = (
 
 <html lang="en">
     <head>
+        <!-- Google tag (gtag.js) -->
+        <script
+            type="text/partytown"
+            async
+            src="https://www.googletagmanager.com/gtag/js?id=G-0DX2BT6EQ9"
+        ></script>
+        <script type="text/partytown">
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+            gtag("js", new Date());
+
+            gtag("config", "G-0DX2BT6EQ9");
+        </script>
+
         <meta charset="utf-8" />
         <link rel="sitemap" href="/sitemap-index.xml" />
         <link rel="icon" type="image/png" href={faviconSrcPNG} />
