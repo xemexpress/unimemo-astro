@@ -1,0 +1,11 @@
+---
+name: "Packaging"
+sku: "014258867"
+images:
+    - ./images/014258867.jpg
+tags: ["new"]
+unit: piece
+price: 10
+remarks: "- Can hold necklaces, pendants, earrings, studs, and bracelets.\n- Ultra-microfiber material."
+isAvailable: false
+---

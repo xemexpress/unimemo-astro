@@ -1,8 +1,11 @@
 import { defineCollection, z } from "astro:content";
+import { StringUtils } from "../utils/coreUtils";
 
 const productsCollection = defineCollection({
-    schema: ({ image }) =>
+    type: "content",
+    schema: ({ image }: any) =>
         z.object({
+            name: z.string(),
             sku: z.string(),
             images: z.array(image()),
             tags: z.array(z.string()),
@@ -12,6 +15,7 @@ const productsCollection = defineCollection({
             remarks: z.string().default("No additional remarks"),
             isAvailable: z.boolean(),
         }),
+    slug: ({ data }: any) => StringUtils.slugify(data.name),
 });
 
 export const collections = {

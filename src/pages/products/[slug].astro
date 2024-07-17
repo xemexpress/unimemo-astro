@@ -9,16 +9,18 @@ import MarkdownIt from "markdown-it";
 import sanitizeHtml from "sanitize-html";
 import { getEntryBySlug } from "astro:content";
 import Back from "../../components/Back.astro";
+import { ROUTES } from "../../utils/routes";
 
 const { slug } = Astro.params;
 const product = await getEntryBySlug("products", slug as string);
 
 if (!product) {
-    return Astro.redirect("/404");
+    return Astro.redirect(ROUTES.NOT_FOUND);
 }
 
 const md = new MarkdownIt();
 const {
+    name,
     images,
     sku,
     tags,
@@ -36,7 +38,7 @@ const description = SEOUtils.generateProductDetailSiteDescription(
     stones
 );
 
-const title = `Product ${sku}`;
+const title = name;
 const renderedRemarks = md.render(remarks);
 
 const coverImageSrc = (await getImage({ src: images[0], format: "jpg" })).src;
@@ -219,7 +221,7 @@ const coverImageSrc = (await getImage({ src: images[0], format: "jpg" })).src;
         {
             images.length > 1 && (
                 <div class="mt-6 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
-                    {images.slice(1).map((image, index: number) => (
+                    {images.slice(1).map((image: string, index: number) => (
                         <Image
                             src={image}
                             alt={`${sku} | Product image ${index + 2}`}

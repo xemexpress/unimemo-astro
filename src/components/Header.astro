@@ -1,21 +1,113 @@
 ---
 import { Image } from "astro:assets";
 import { OUR_BRAND } from "../utils/constants";
+import { ROUTES } from "../utils/routes";
 import logo from "../content/logo.png";
+import { projectAuth } from "../firebase/client";
+
+const user = await projectAuth.currentUser;
+const currentPath = Astro.url.pathname;
+const isLoginPage = currentPath === ROUTES.LOGIN;
+const isFeedbackPage = currentPath === ROUTES.FEEDBACK;
 ---
 
-<header class="absolute z-10 left-4 top-4">
-    <div
-        class="sm:bg-opacity-90 sm:backdrop-blur-sm rounded-xl sm:px-2 sm:py-2 shadow-lg transition-all duration-300 hover:bg-white"
+<header
+    id="sticky-header"
+    class="fixed top-0 left-0 right-0 z-50 px-3 sm:px-4 py-2 sm:py-3 flex justify-between items-center bg-white bg-opacity-90 backdrop-blur-sm shadow-md transition-all duration-300 ease-in-out"
+>
+    <a
+        href="/"
+        class="flex items-center rounded-lg transition-all duration-300 hover:bg-gray-100"
     >
-        <a class="flex items-center" href="/">
-            <Image
-                class="w-12 h-12 object-contain"
-                src={logo}
-                alt=`${OUR_BRAND.NAME} Logo`
-                width={150}
-                height={150}
-            />
-        </a>
-    </div>
+        <Image
+            class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 object-contain"
+            src={logo}
+            alt={`${OUR_BRAND.NAME} Logo`}
+            width={150}
+            height={150}
+        />
+    </a>
+    <nav class="flex items-center space-x-2 sm:space-x-4">
+        {
+            user && (
+                <a
+                    href={ROUTES.PROFILE}
+                    class="bg-gray-200 text-gray-800 w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-sm sm:text-base font-bold hover:bg-gray-300 transition duration-300"
+                    aria-label="User Profile"
+                >
+                    {user.displayName?.[0].toUpperCase() ||
+                        user.email?.[0].toUpperCase() ||
+                        "U"}
+                </a>
+            )
+        }
+        {
+            !user && !isLoginPage && !isFeedbackPage && (
+                <a
+                    href={ROUTES.LOGIN}
+                    class="bg-sky-900 text-white px-3 py-2 rounded-full text-xs sm:text-sm hover:bg-sky-800 transition duration-300 h-8 sm:h-10 flex items-center justify-center"
+                >
+                    Log In
+                </a>
+            )
+        }
+        {
+            isFeedbackPage && (
+                <a
+                    href={ROUTES.HOME}
+                    class="text-sky-600 hover:text-sky-800 transition duration-300 text-xs sm:text-sm font-medium h-8 sm:h-10 flex items-center justify-center"
+                >
+                    Back to Home
+                </a>
+            )
+        }
+        {
+            !isFeedbackPage && (
+                <a
+                    href={ROUTES.FEEDBACK}
+                    class="group relative flex items-center justify-center bg-green-500 text-white rounded-full hover:bg-green-600 transition duration-300 h-8 sm:h-10 w-8 sm:w-10"
+                    aria-label="Send Feedback"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-5 w-5 sm:h-6 sm:w-6"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
+                        />
+                    </svg>
+                    <span class="absolute top-full right-0 mt-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+                        Send Feedback
+                    </span>
+                </a>
+            )
+        }
+    </nav>
 </header>
+
+<script>
+    const header = document.getElementById("sticky-header") as HTMLElement;
+    let lastScrollTop = 0;
+    const scrollThreshold = 50;
+
+    const handleScroll = () => {
+        const scrollTop =
+            window.pageYOffset || document.documentElement.scrollTop;
+
+        if (scrollTop > lastScrollTop && scrollTop > scrollThreshold) {
+            header.style.transform = "translateY(-100%)";
+        } else {
+            header.style.transform = "translateY(0)";
+        }
+
+        lastScrollTop = Math.max(scrollTop, 0);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+</script>

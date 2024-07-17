@@ -1,6 +1,7 @@
 ---
 import { METAL, PLATING, PRODUCT } from "../utils/constants";
 import { StringUtils } from "../utils/coreUtils";
+import { ROUTES } from "../utils/routes";
 
 const currentSearchParams = Astro.url.searchParams;
 const isPackagingSelected =
@@ -105,7 +106,7 @@ const activeFilters = filterCategories
     {
         activeFilters.length > 0 && (
             <a
-                href="/overview"
+                href={`${ROUTES.OVERVIEW}`}
                 class="text-sky-600 hover:text-sky-800 transition-colors text-sm"
             >
                 Clear all filters

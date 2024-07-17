@@ -16,7 +16,19 @@ export const StringUtils = {
             .replace(/[^\w\s]/gi, "")
             .toLowerCase(); // Remove plus signs
     },
+    slugify: (text: string): string => {
+        return text
+            .toString()
+            .toLowerCase()
+            .trim()
+            .replace(/\s+/g, "-") // Replace spaces with -
+            .replace(/[^\w\-]+/g, "") // Remove all non-word chars
+            .replace(/\-\-+/g, "-") // Replace multiple - with single -
+            .replace(/^-+/, "") // Trim - from start of text
+            .replace(/-+$/, ""); // Trim - from end of text
+    },
 };
+
 export const LinkUtils = {
     generateLink: (params: Record<string, string>): string => {
         const searchParams = new URLSearchParams();

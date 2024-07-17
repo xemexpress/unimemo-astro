@@ -1,0 +1,12 @@
+---
+name: "Golden Moonlight Necklace"
+sku: "224133800"
+images:
+    - ./images/224133800.jpg
+tags: ["new"]
+unit: piece
+price: 76
+stones: freshwater pearls, cubic zirconia
+remarks: "- Nickel-free."
+isAvailable: true
+---

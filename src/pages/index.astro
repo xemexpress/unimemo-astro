@@ -5,6 +5,7 @@ import H1 from "../components/H1.astro";
 import Main from "../components/Main.astro";
 import { OUR_BRAND } from "../utils/constants";
 import FeaturedProductCarousel from "../components/FeaturedProductCarousel.astro";
+import { ROUTES } from "../utils/routes";
 
 const allProducts = await getCollection("products");
 const featuredProducts = [
@@ -48,7 +49,7 @@ const description = OUR_BRAND.DESCRIPTION;
                 >
             </p>
             <a
-                href="/overview"
+                href=`${ROUTES.OVERVIEW}`
                 class="bg-white text-sky-900 px-6 py-3 rounded-full text-base sm:text-lg font-semibold hover:bg-sky-100 transition duration-300"
             >
                 Explore Our Collection
@@ -62,7 +63,7 @@ const description = OUR_BRAND.DESCRIPTION;
 
         <div class="mt-8 mb-6 text-center">
             <a
-                href="/overview"
+                href=`${ROUTES.OVERVIEW}`
                 class="inline-block bg-sky-900 text-white px-6 py-3 rounded-full text-base sm:text-lg hover:bg-sky-800 transition duration-300"
             >
                 View All Products

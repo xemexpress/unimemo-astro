@@ -1,7 +1,8 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import { ProductUtils } from "../utils/coreUtils";
+import { ProductUtils, StringUtils } from "../utils/coreUtils";
 import { Image } from "astro:assets";
+import { ROUTES } from "../utils/routes";
 
 type Props = {
     product: CollectionEntry<"products">;
@@ -10,7 +11,7 @@ type Props = {
 
 const { product } = Astro.props;
 
-const { images, sku, unit, price, isAvailable } = product.data;
+const { name, images, sku, unit, price, isAvailable } = product.data;
 
 const { productType } = ProductUtils.deriveProductInfo(sku);
 
@@ -18,6 +19,9 @@ const currentPage = Astro.url.searchParams.get("page") || 1;
 const productT = Astro.url.searchParams.get("product-type") || "";
 const platingT = Astro.url.searchParams.get("plating-type") || "";
 const metalT = Astro.url.searchParams.get("metal-type") || "";
+
+// Generate the slug from the product name
+const slug = StringUtils.slugify(name);
 ---
 
 <article
@@ -25,7 +29,7 @@ const metalT = Astro.url.searchParams.get("metal-type") || "";
     id={sku}
 >
     <a
-        href={`/products/${product.slug}?p=${currentPage}${productT.length > 0 ? `&product-type=${productT}` : ""}${platingT.length > 0 ? `&plating-type=${platingT}` : ""}${metalT.length > 0 ? `&metal-type=${metalT}` : ""}`}
+        href={`${ROUTES.PRODUCTS(slug)}?p=${currentPage}${productT.length > 0 ? `&product-type=${productT}` : ""}${platingT.length > 0 ? `&plating-type=${platingT}` : ""}${metalT.length > 0 ? `&metal-type=${metalT}` : ""}`}
         class="block relative"
     >
         <Image

@@ -1,4 +1,6 @@
 ---
+import { ROUTES } from "../utils/routes";
+
 const { slug } = Astro.params;
 const params = new URLSearchParams(Astro.url.search);
 params.delete("p");
@@ -7,7 +9,7 @@ const queryString = params.toString();
 
 <a
     class="inline-block p-2 text-gray-600 hover:text-gray-800 transition-colors duration-200"
-    href={`/overview${queryString ? `?${queryString}` : ""}${slug ? `#${slug}` : ""}`}
+    href={`${ROUTES.OVERVIEW}${queryString ? `?${queryString}` : ""}${slug ? `#${slug}` : ""}`}
     aria-label="Back to overview"
 >
     <svg
