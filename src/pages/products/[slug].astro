@@ -9,7 +9,6 @@ import MarkdownIt from "markdown-it";
 import sanitizeHtml from "sanitize-html";
 import { getEntryBySlug } from "astro:content";
 import Back from "../../components/Back.astro";
-import { ROUTES } from "../../utils/routes";
 
 const { slug } = Astro.params;
 const product = await getEntryBySlug("products", slug as string);

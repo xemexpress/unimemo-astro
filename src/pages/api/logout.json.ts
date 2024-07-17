@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
 import { projectAuth } from "../../firebase/client";
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async () => {
     try {
         await projectAuth.signOut();
 

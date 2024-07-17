@@ -1,0 +1,11 @@
+---
+name: "Stellar Love Locket Pendant - Y"
+sku: "114146100"
+images:
+    - ./images/114146100.jpg
+tags: ["new"]
+unit: piece
+price: 117
+remarks: "- Text: I Love you to the moon & back\n- About 13mm wide.\n- Openable design.\n- Nickel-free"
+isAvailable: true
+---

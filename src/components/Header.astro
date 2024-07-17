@@ -5,7 +5,7 @@ import { ROUTES } from "../utils/routes";
 import logo from "../content/logo.png";
 import { projectAuth } from "../firebase/client";
 
-const user = await projectAuth.currentUser;
+const user = projectAuth.currentUser;
 const currentPath = Astro.url.pathname;
 const isLoginPage = currentPath === ROUTES.LOGIN;
 const isFeedbackPage = currentPath === ROUTES.FEEDBACK;
@@ -97,8 +97,7 @@ const isFeedbackPage = currentPath === ROUTES.FEEDBACK;
     const scrollThreshold = 50;
 
     const handleScroll = () => {
-        const scrollTop =
-            window.pageYOffset || document.documentElement.scrollTop;
+        const scrollTop = window.scrollY || document.documentElement.scrollTop;
 
         if (scrollTop > lastScrollTop && scrollTop > scrollThreshold) {
             header.style.transform = "translateY(-100%)";

@@ -1,5 +1,4 @@
 import { defineCollection, z } from "astro:content";
-import { StringUtils } from "../utils/coreUtils";
 
 const productsCollection = defineCollection({
     type: "content",
@@ -15,7 +14,6 @@ const productsCollection = defineCollection({
             remarks: z.string().default("No additional remarks"),
             isAvailable: z.boolean(),
         }),
-    slug: ({ data }: any) => StringUtils.slugify(data.name),
 });
 
 export const collections = {

@@ -19,7 +19,7 @@ export default defineConfig({
     site: "https://unimemo.netlify.app/",
     output: "server",
     adapter: netlify(),
-    experimental: {
-        actions: true,
-    },
+    // experimental: {
+    //     actions: true,
+    // },
 });

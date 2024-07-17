@@ -6,11 +6,7 @@ import { ROUTES } from "../../utils/routes";
 export const POST: APIRoute = async ({ request }) => {
     const { email, password } = await request.json();
     try {
-        const user = await createUserWithEmailAndPassword(
-            projectAuth,
-            email,
-            password
-        );
+        await createUserWithEmailAndPassword(projectAuth, email, password);
 
         return new Response(
             JSON.stringify({
