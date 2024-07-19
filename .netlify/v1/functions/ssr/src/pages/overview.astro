@@ -1,0 +1,68 @@
+---
+import { getCollection } from "astro:content";
+import ProductListView from "../components/ProductListView.astro";
+import { UI, OUR_BRAND } from "../utils/constants";
+import { ProductUtils, StringUtils } from "../utils/coreUtils";
+
+const allProducts = await getCollection("products");
+
+const productType = Astro.url.searchParams.get("product-type");
+const metalType = Astro.url.searchParams.get("metal-type");
+const platingType = Astro.url.searchParams.get("plating-type");
+
+const filteredProducts = allProducts
+    .filter(
+        (product) =>
+            ProductUtils.matchesAllFilters(
+                product.data.sku,
+                productType,
+                metalType,
+                platingType
+            ) &&
+            (productType ||
+                metalType ||
+                platingType ||
+                product.data.isAvailable)
+    )
+    .sort((a, b) => a.data.price - b.data.price);
+
+const totalPages = Math.ceil(filteredProducts.length / UI.PRODUCTS_PER_PAGE);
+
+let page = Number(Astro.url.searchParams.get("page")) || 1;
+
+// Ensure page is within valid range
+if (page < 1) {
+    page = 1;
+} else if (page > totalPages) {
+    page = totalPages;
+}
+
+const start = (page - 1) * UI.PRODUCTS_PER_PAGE;
+const end = start + UI.PRODUCTS_PER_PAGE;
+
+const title = `價目單${productType ? ` - ${StringUtils.capitalizeFirstLetter(productType)}` : ""}${
+    metalType ? ` - ${StringUtils.capitalizeFirstLetter(metalType)}` : ""
+}${platingType ? ` - ${StringUtils.capitalizeFirstLetter(platingType)}` : ""}`;
+
+const products = filteredProducts.slice(start, end);
+
+// Redirect if the page number was adjusted
+if (page !== Number(Astro.url.searchParams.get("page"))) {
+    return Astro.redirect(
+        `${Astro.url.pathname}?page=${page}${
+            productType ? `&product-type=${productType}` : ""
+        }${metalType ? `&metal-type=${metalType}` : ""}${
+            platingType ? `&plating-type=${platingType}` : ""
+        }`,
+        302
+    );
+}
+---
+
+<ProductListView
+    title={title}
+    description={OUR_BRAND.DESCRIPTION}
+    products={products}
+    totalPages={totalPages}
+    page={page}
+/>

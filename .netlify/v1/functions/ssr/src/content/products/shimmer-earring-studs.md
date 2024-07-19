@@ -1,0 +1,12 @@
+---
+name: "Shimmer Earring Studs"
+sku: "334174600"
+images:
+    - ./images/334174600.jpg
+tags: ["new"]
+unit: pair
+price: 58
+stones: synthetic opal, cubic zirconia
+remarks: "- About 7mm wide.\n- Nickel-free."
+isAvailable: true
+---

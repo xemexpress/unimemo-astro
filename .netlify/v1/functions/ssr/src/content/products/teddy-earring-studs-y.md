@@ -1,0 +1,12 @@
+---
+name: "Teddy Earring Studs - Y"
+sku: "334168400"
+images:
+    - ./images/334168400.jpg
+tags: ["new"]
+unit: pair
+price: 48
+stones: cubic zirconia
+remarks: "- About 7mm wide.\n- Nickel-free."
+isAvailable: true
+---

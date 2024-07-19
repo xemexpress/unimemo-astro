@@ -1,0 +1,23 @@
+---
+import Main from "../components/Main.astro";
+import Layout from "../layouts/Layout.astro";
+
+const title = "Page Not Found";
+const description = "404: This isn't the page you're looking for...";
+---
+
+<Layout title={title} description={description}>
+    <Main>
+        <div class="text-center py-12">
+            <p class="text-2xl mb-6">
+                This isn't the page you're looking for...
+            </p>
+            <a
+                href="/"
+                class="inline-block bg-sky-500 hover:bg-sky-700 text-white font-bold py-2 px-4 rounded transition duration-300"
+            >
+                Return to home page
+            </a>
+        </div>
+    </Main>
+</Layout>
