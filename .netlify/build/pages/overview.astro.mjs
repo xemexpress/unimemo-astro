@@ -1,12 +1,12 @@
 /* empty css                                  */
 import { d as createAstro, c as createComponent, r as renderTemplate, m as maybeRenderHead, b as addAttribute, a as renderComponent } from '../chunks/astro/server_tfYgqP3C.mjs';
 import 'kleur/colors';
-import { S as StringUtils, g as getCollection, P as ProductUtils } from '../chunks/coreUtils_Doa5Wz6n.mjs';
-import { $ as $$Main, a as $$Layout } from '../chunks/Layout_BjTnNXMf.mjs';
+import { S as StringUtils, g as getCollection, P as ProductUtils } from '../chunks/coreUtils_CRoQrX7v.mjs';
+import { $ as $$Main, a as $$Layout } from '../chunks/Layout_BmkXWlNO.mjs';
 import { P as PRODUCT, M as METAL, a as PLATING, O as OUR_BRAND, U as UI } from '../chunks/constants_zJHtZRx4.mjs';
 import { $ as $$H1 } from '../chunks/H1_D3wNYO_z.mjs';
 import 'clsx';
-import { $ as $$ProductCard } from '../chunks/ProductCard_DsT0ZS2e.mjs';
+import { $ as $$ProductCard } from '../chunks/ProductCard_DLG969Hg.mjs';
 import { R as ROUTES } from '../chunks/routes_Be0JyTu8.mjs';
 /* empty css                                    */
 export { renderers } from '../renderers.mjs';

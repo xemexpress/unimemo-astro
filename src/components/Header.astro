@@ -25,6 +25,9 @@ const isFeedbackPage = currentPath === ROUTES.FEEDBACK;
             alt={`${OUR_BRAND.NAME} Logo`}
             width={150}
             height={150}
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
         />
     </a>
     <nav class="flex items-center space-x-2 sm:space-x-4">

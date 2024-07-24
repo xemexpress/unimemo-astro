@@ -1,8 +1,8 @@
 /* empty css                                     */
 import { d as createAstro, c as createComponent, r as renderTemplate, m as maybeRenderHead, b as addAttribute, a as renderComponent, F as Fragment, u as unescapeHTML } from '../../chunks/astro/server_tfYgqP3C.mjs';
 import 'kleur/colors';
-import { a as getEntryBySlug, P as ProductUtils, b as SEOUtils, S as StringUtils } from '../../chunks/coreUtils_Doa5Wz6n.mjs';
-import { $ as $$Main, a as $$Layout } from '../../chunks/Layout_BjTnNXMf.mjs';
+import { a as getEntryBySlug, P as ProductUtils, b as SEOUtils, S as StringUtils } from '../../chunks/coreUtils_CRoQrX7v.mjs';
+import { $ as $$Main, a as $$Layout } from '../../chunks/Layout_BmkXWlNO.mjs';
 import { $ as $$H1 } from '../../chunks/H1_D3wNYO_z.mjs';
 import { a as getImage, $ as $$Image } from '../../chunks/_astro_assets_hW39gdnb.mjs';
 import { P as PRODUCT } from '../../chunks/constants_zJHtZRx4.mjs';

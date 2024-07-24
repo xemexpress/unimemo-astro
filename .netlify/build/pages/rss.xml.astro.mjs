@@ -1,5 +1,5 @@
 import rss from '@astrojs/rss';
-import { g as getCollection, P as ProductUtils, S as StringUtils, b as SEOUtils } from '../chunks/coreUtils_Doa5Wz6n.mjs';
+import { g as getCollection, P as ProductUtils, S as StringUtils, b as SEOUtils } from '../chunks/coreUtils_CRoQrX7v.mjs';
 import sanitizeHtml from 'sanitize-html';
 import { O as OUR_BRAND } from '../chunks/constants_zJHtZRx4.mjs';
 import { R as ROUTES } from '../chunks/routes_Be0JyTu8.mjs';

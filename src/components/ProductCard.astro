@@ -35,9 +35,12 @@ const slug = StringUtils.slugify(name);
         <Image
             class="rounded-lg aspect-square transition-transform duration-300 ease-in-out group-hover:scale-105 group-hover:shadow-md"
             src={images[0]}
-            alt={`Product Image of ${sku}`}
+            alt={`${sku} ${name}`}
             width={400}
             height={400}
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
         />
         <div
             class="absolute top-2 left-2 bg-white bg-opacity-75 px-2 py-1 rounded text-sky-900 capitalize text-xs max-sm:text-[11px]"

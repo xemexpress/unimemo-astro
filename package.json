@@ -16,6 +16,7 @@
         "@astrojs/rss": "^4.0.7",
         "@astrojs/sitemap": "^3.1.6",
         "@astrojs/tailwind": "^5.1.0",
+        "@builder.io/partytown": "^0.10.2",
         "astro": "^4.12.2",
         "astro-seo": "^0.8.4",
         "firebase": "^10.12.3",
