@@ -7,6 +7,6 @@ tags: ["new"]
 unit: piece
 price: 76
 stones: freshwater pearls, cubic zirconia
-remarks: "- Nickel-free."
+remarks: "- On a 16-18\" adjustable chain.\n- Nickel-free."
 isAvailable: true
 ---
