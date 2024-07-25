@@ -9,7 +9,6 @@ export const POST: APIRoute = async ({ request }) => {
 
     try {
         await signInWithEmailAndPassword(projectAuth, email, password);
-        console.log("hello world");
         return new Response(
             JSON.stringify({
                 message: "Logged in successfully!",

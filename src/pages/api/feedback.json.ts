@@ -10,18 +10,16 @@ export const POST: APIRoute = async ({ request }) => {
         // Check if there's any input
         if (experience || improvement || newIdeas) {
             // Add feedback to Firestore
-            const feedbackRef = await addDoc(
-                collection(projectFirestore, "feedback"),
-                {
-                    experience: experience || "",
-                    improvement: improvement || "",
-                    newIdeas: newIdeas || "",
-                    timestamp: serverTimestamp(),
-                    userId: "anonymous", // You can modify this if you're tracking user sessions
-                }
-            );
+            // const feedbackRef =
+            await addDoc(collection(projectFirestore, "feedback"), {
+                experience: experience || "",
+                improvement: improvement || "",
+                newIdeas: newIdeas || "",
+                timestamp: serverTimestamp(),
+                userId: "anonymous", // You can modify this if you're tracking user sessions
+            });
 
-            console.log("Feedback saved with ID: ", feedbackRef.id);
+            // console.log("Feedback saved with ID: ", feedbackRef.id);
         }
 
         // Always return a success response with a redirect

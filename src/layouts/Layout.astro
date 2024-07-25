@@ -8,6 +8,7 @@ import { getImage } from "astro:assets";
 import logo from "../content/logo.png";
 import logoBg from "../content/logo-bg.png";
 import BackToTop from "../components/BackToTop.astro";
+import { ViewTransitions } from "astro:transitions";
 
 type Props = {
     title: string;
@@ -120,6 +121,7 @@ const faviconSrcPNG = (
             name="google-site-verification"
             content="LcgIWvFWzJ_TFe9E2nuM6LfmtdXoSfwl5HX0En1P9Is"
         />
+        <ViewTransitions />
     </head>
     <body class="min-h-screen grid grid-rows-[auto,1fr,auto]">
         <Header />

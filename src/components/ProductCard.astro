@@ -1,7 +1,7 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import { ProductUtils, StringUtils } from "../utils/coreUtils";
-import { Image } from "astro:assets";
+import { getImage, Image } from "astro:assets";
 import { ROUTES } from "../utils/routes";
 
 type Props = {
@@ -22,6 +22,8 @@ const metalT = Astro.url.searchParams.get("metal-type") || "";
 
 // Generate the slug from the product name
 const slug = StringUtils.slugify(name);
+
+const coverImageSrc = (await getImage({ src: images[0], format: "jpg" })).src;
 ---
 
 <article
@@ -34,36 +36,39 @@ const slug = StringUtils.slugify(name);
     >
         <Image
             class="rounded-lg aspect-square transition-transform duration-300 ease-in-out group-hover:scale-105 group-hover:shadow-md"
-            src={images[0]}
+            src={coverImageSrc}
             alt={`${sku} ${name}`}
             width={400}
             height={400}
+            format="webp"
             loading="eager"
-            fetchpriority="high"
-            decoding="async"
+            transition:name={`${slug}-image`}
         />
         <div
             class="absolute top-2 left-2 bg-white bg-opacity-75 px-2 py-1 rounded text-sky-900 capitalize text-xs max-sm:text-[11px]"
+            transition:name={`${slug}-product-type`}
         >
             {productType}
         </div>
         <div
             class="max-sm:hidden absolute top-2 right-2 bg-white bg-opacity-75 px-2 py-1 rounded text-xs max-sm:text-[11px]"
+            transition:name={`${slug}-sku`}
         >
             {sku}
         </div>
         <div
             class="hidden absolute top-2 left-2 right-2 bg-white bg-opacity-75 px-2 py-1 justify-between items-center text-xs max-sm:text-[11px] rounded text-sky-900 capitalize max-sm:flex"
         >
-            <span>
+            <span transition:name={`${slug}-product-type`}>
                 {productType}
             </span>
-            <span>
+            <span transition:name={`${slug}-sku`}>
                 {sku}
             </span>
         </div>
         <div
             class="absolute bottom-2 left-2 bg-white bg-opacity-75 px-2 py-1 rounded text-xs max-sm:text-[11px]"
+            transition:name={`${slug}-unit-price`}
         >
             HK${price}/{unit}
         </div>

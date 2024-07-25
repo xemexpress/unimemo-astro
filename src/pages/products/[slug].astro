@@ -63,9 +63,11 @@ const coverImageSrc = (await getImage({ src: images[0], format: "jpg" })).src;
                 <Image
                     class="w-full max-w-md shadow-lg object-cover transition-transform duration-300 ease-in-out hover:scale-110 rounded-3xl"
                     src={images[0]}
+                    format="webp"
                     alt={title}
                     width={1024}
                     height={1024}
+                    transition:name={`${slug}-image`}
                 />
             </div>
 
@@ -89,7 +91,7 @@ const coverImageSrc = (await getImage({ src: images[0], format: "jpg" })).src;
                                 >
                                 <td
                                     class="px-3 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium text-gray-700"
-                                    >{sku}</td
+                                    transition:name={`${slug}-sku`}>{sku}</td
                                 >
                             </tr>
                             <tr
@@ -101,6 +103,7 @@ const coverImageSrc = (await getImage({ src: images[0], format: "jpg" })).src;
                                 >
                                 <td
                                     class="px-3 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium text-gray-700"
+                                    transition:name={`${slug}-unit-price`}
                                 >
                                     HK${price} / {unit}
                                 </td>
@@ -127,6 +130,7 @@ const coverImageSrc = (await getImage({ src: images[0], format: "jpg" })).src;
                                 >
                                 <td
                                     class="px-3 py-3 sm:px-6 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-700"
+                                    transition:name={`${slug}-product-type`}
                                 >
                                     {
                                         StringUtils.capitalizeFirstLetter(
@@ -220,15 +224,23 @@ const coverImageSrc = (await getImage({ src: images[0], format: "jpg" })).src;
         {
             images.length > 1 && (
                 <div class="mt-6 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
-                    {images.slice(1).map((image: string, index: number) => (
-                        <Image
-                            src={image}
-                            alt={`${sku} | Product image ${index + 2}`}
-                            width={360}
-                            height={360}
-                            class="rounded-md object-cover"
-                        />
-                    ))}
+                    {images
+                        .slice(1)
+                        .map(async (image: string, index: number) => {
+                            const imageSrc = (
+                                await getImage({ src: image, format: "jpg" })
+                            ).src;
+
+                            return (
+                                <Image
+                                    class="rounded-md object-cover"
+                                    src={imageSrc}
+                                    alt={`${sku} ${name} | ${index + 2}`}
+                                    width={360}
+                                    height={360}
+                                />
+                            );
+                        })}
                 </div>
             )
         }
