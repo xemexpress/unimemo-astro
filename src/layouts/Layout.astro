@@ -26,10 +26,10 @@ const { title, description, type = "website", image, product } = Astro.props;
 const brandedTitle = title.toLowerCase().includes(OUR_BRAND.NAME.toLowerCase())
     ? title
     : `${title} | ${OUR_BRAND.NAME}`;
-
+const logoImg = (await getImage({ src: logo, format: "png" })).src;
 const finalImageSrc = (
     await getImage({
-        src: image || logo,
+        src: image || logoImg,
         width: 1200,
         height: 630,
         format: "jpg",
