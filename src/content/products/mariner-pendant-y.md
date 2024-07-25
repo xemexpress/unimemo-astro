@@ -7,6 +7,6 @@ tags: ["new"]
 unit: piece
 price: 64
 stones: cubic zirconia
-remarks: "- About 8mm wide.\n- Nickel-free."
+remarks: "- About 8mm wide.\n- On a 16\" chain.\n- Nickel-free."
 isAvailable: true
 ---

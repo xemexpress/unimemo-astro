@@ -6,6 +6,6 @@ images:
 tags: ["new"]
 unit: piece
 price: 117
-remarks: "- Text: I Love you to the moon & back\n- Openable design.\n- About 13mm wide.\n- Nickel-free"
+remarks: "- About 13mm wide.\n- On a 16\" chain.\n- Text: I Love you to the moon & back.\n- Openable design.\n- Nickel-free"
 isAvailable: true
 ---

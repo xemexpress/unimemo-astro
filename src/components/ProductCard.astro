@@ -28,7 +28,7 @@ const coverImageSrc = (await getImage({ src: images[0], format: "jpg" })).src;
 
 <article
     class="group relative transition-all duration-300 ease-in-out overflow-hidden rounded-lg"
-    id={sku}
+    id={slug}
 >
     <a
         href={`${ROUTES.PRODUCTS(slug)}?p=${currentPage}${productT.length > 0 ? `&product-type=${productT}` : ""}${platingT.length > 0 ? `&plating-type=${platingT}` : ""}${metalT.length > 0 ? `&metal-type=${metalT}` : ""}`}

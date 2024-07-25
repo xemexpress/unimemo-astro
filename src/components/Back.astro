@@ -3,6 +3,8 @@ import { ROUTES } from "../utils/routes";
 
 const { slug } = Astro.params;
 const params = new URLSearchParams(Astro.url.search);
+const redirectPage = params.get("p") || "1";
+params.set("page", redirectPage);
 params.delete("p");
 const queryString = params.toString();
 ---

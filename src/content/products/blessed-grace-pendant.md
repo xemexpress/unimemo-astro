@@ -7,6 +7,6 @@ images:
 tags: ["new"]
 unit: piece
 price: 64
-remarks: "- About 11mm wide.\n- Nickel-free."
+remarks: "- About 11mm wide.\n- On a 16\" chain.\n- Nickel-free."
 isAvailable: true
 ---
