@@ -132,7 +132,7 @@ const activeFilters = filterCategories
 </style>
 
 <script>
-    document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("astro:page-load", () => {
         const activeFilters = new URLSearchParams(window.location.search);
         activeFilters.forEach((_, key) => {
             const details = document.querySelector(

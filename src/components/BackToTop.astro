@@ -18,24 +18,23 @@
     </svg>
 </button>
 <script>
-    const backToTopBtn = document.getElementById(
-        "backToTopBtn"
-    ) as HTMLButtonElement;
+    document.addEventListener("astro:page-load", () => {
+        const backToTopBtn = document.getElementById(
+            "backToTopBtn"
+        ) as HTMLButtonElement;
 
-    window.addEventListener("scroll", () => {
-        if (window.scrollY > 300) {
-            backToTopBtn.classList.remove("opacity-0");
-            backToTopBtn.classList.add("opacity-100");
-        } else {
-            backToTopBtn.classList.remove("opacity-100");
-            backToTopBtn.classList.add("opacity-0");
-        }
-    });
+        window.addEventListener("scroll", () => {
+            const isScrolled =
+                window.scrollY > 300 || document.body.scrollTop > 300;
+            backToTopBtn.classList.toggle("opacity-0", !isScrolled);
+            backToTopBtn.classList.toggle("opacity-100", isScrolled);
+        });
 
-    backToTopBtn.addEventListener("click", () => {
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth",
+        backToTopBtn.addEventListener("click", () => {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth",
+            });
         });
     });
 </script>

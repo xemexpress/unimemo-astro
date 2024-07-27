@@ -95,21 +95,24 @@ const isFeedbackPage = currentPath === ROUTES.FEEDBACK;
 </header>
 
 <script>
-    const header = document.getElementById("sticky-header") as HTMLElement;
-    let lastScrollTop = 0;
-    const scrollThreshold = 50;
+    document.addEventListener("astro:page-load", () => {
+        const header = document.getElementById("sticky-header") as HTMLElement;
+        let lastScrollTop = 0;
+        const scrollThreshold = 50;
 
-    const handleScroll = () => {
-        const scrollTop = window.scrollY || document.documentElement.scrollTop;
+        const handleScroll = () => {
+            const scrollTop =
+                window.scrollY || document.documentElement.scrollTop;
 
-        if (scrollTop > lastScrollTop && scrollTop > scrollThreshold) {
-            header.style.transform = "translateY(-100%)";
-        } else {
-            header.style.transform = "translateY(0)";
-        }
+            if (scrollTop > lastScrollTop && scrollTop > scrollThreshold) {
+                header.style.transform = "translateY(-100%)";
+            } else {
+                header.style.transform = "translateY(0)";
+            }
 
-        lastScrollTop = Math.max(scrollTop, 0);
-    };
+            lastScrollTop = Math.max(scrollTop, 0);
+        };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
+        window.addEventListener("scroll", handleScroll, { passive: true });
+    });
 </script>

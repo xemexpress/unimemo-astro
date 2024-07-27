@@ -99,15 +99,13 @@ const { products } = Astro.props;
 </style>
 
 <script>
-    const carousel = document.getElementById("carousel") as HTMLElement;
-    const prevBtn = document.getElementById("prevBtn") as HTMLButtonElement;
-    const nextBtn = document.getElementById("nextBtn") as HTMLButtonElement;
-    const prevArrow = document.getElementById("prevArrow") as any;
-    const nextArrow = document.getElementById("nextArrow") as any;
-
-    const scrollAmount = 200;
-
-    function updateButtonStates() {
+    function updateButtonStates(
+        carousel: HTMLElement,
+        prevArrow: HTMLElement,
+        nextArrow: HTMLElement,
+        prevBtn: HTMLButtonElement,
+        nextBtn: HTMLButtonElement
+    ) {
         const isAtStart = carousel.scrollLeft <= 0;
         const isAtEnd =
             carousel.scrollLeft >=
@@ -120,17 +118,31 @@ const { products } = Astro.props;
         nextBtn.style.cursor = isAtEnd ? "default" : "pointer";
     }
 
-    prevBtn.addEventListener("click", () => {
-        carousel.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+    document.addEventListener("astro:page-load", () => {
+        const carousel = document.getElementById("carousel") as HTMLElement;
+        const prevBtn = document.getElementById("prevBtn") as HTMLButtonElement;
+        const nextBtn = document.getElementById("nextBtn") as HTMLButtonElement;
+        const prevArrow = document.getElementById("prevArrow") as HTMLElement;
+        const nextArrow = document.getElementById("nextArrow") as HTMLElement;
+
+        const scrollAmount = 200;
+
+        prevBtn.addEventListener("click", () => {
+            carousel.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+        });
+
+        nextBtn.addEventListener("click", () => {
+            carousel.scrollBy({ left: scrollAmount, behavior: "smooth" });
+        });
+
+        carousel.addEventListener("scroll", () =>
+            updateButtonStates(carousel, prevArrow, nextArrow, prevBtn, nextBtn)
+        );
+        window.addEventListener("resize", () =>
+            updateButtonStates(carousel, prevArrow, nextArrow, prevBtn, nextBtn)
+        );
+
+        // Initial button states
+        updateButtonStates(carousel, prevArrow, nextArrow, prevBtn, nextBtn);
     });
-
-    nextBtn.addEventListener("click", () => {
-        carousel.scrollBy({ left: scrollAmount, behavior: "smooth" });
-    });
-
-    carousel.addEventListener("scroll", updateButtonStates);
-    window.addEventListener("resize", updateButtonStates);
-
-    // Initial button states
-    updateButtonStates();
 </script>
